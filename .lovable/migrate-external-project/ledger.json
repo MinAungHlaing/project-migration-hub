@@ -11,7 +11,8 @@
     {"capability": "public endpoints: /api/mobile/* used by Android app", "source": "app.py + mobile/android", "outcome": "preserve", "status": "pending", "next_action": "recreate as server routes"},
     {"capability": "web push notifications", "source": "push.py, VAPID keys", "outcome": "preserve", "status": "pending", "next_action": "recreate; request new VAPID keys via secret form"},
     {"capability": "PWA / offline orders", "source": "static/sw.js, offline-orders.js", "outcome": "migrate", "status": "pending", "next_action": "recreate"},
-    {"capability": "concepts/app prototype", "source": "concepts/app", "outcome": "undecided", "status": "pending", "next_action": "ask user"},
+    {"capability": "concepts/app prototype: all ERP workflows", "source": "concepts/app/app.py and 70 templates", "outcome": "migrate", "status": "inventoried", "next_action": "integrate every prototype feature into the main app; default language English"},
+    {"capability": "requested Owner account", "source": "user-selected admin@gtm.com", "outcome": "migrate", "status": "blocked", "next_action": "supplied password rejected as weak; provision identity through a secure password-setup flow and explicitly assign Owner"},
     {"capability": "cutover", "source": "PythonAnywhere host", "outcome": "pending", "status": "pending", "next_action": "point Android app to new URL after verification"},
     {"capability": "verification", "source": "-", "outcome": "pending", "status": "pending", "next_action": "after build"}
   ]
