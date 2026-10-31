@@ -31,14 +31,16 @@ function AdminLayout() {
   const me = useServerFn(whoAmI);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = useQuery({ queryKey: ["whoami"], queryFn: () => me() });
+  const { data, isLoading, error } = useQuery({ queryKey: ["whoami"], queryFn: () => me(), retry: 1 });
 
   if (isLoading) return <div className="flex min-h-screen items-center justify-center text-muted-foreground">Loading…</div>;
   if (!data?.isAdmin) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-3 p-6 text-center">
         <h1 className="text-2xl font-bold">No admin access</h1>
-        <p className="max-w-sm text-muted-foreground">You're signed in as {data?.email}, but this account isn't a catalog admin. Ask the owner to grant access.</p>
+        <p className="max-w-sm text-muted-foreground">
+          {error ? `We couldn't check your access: ${(error as Error).message}` : `You're signed in as ${data?.email ?? ""}, but this account isn't a catalog admin. Ask the owner to grant access.`}
+        </p>
         <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/auth" }); }}>Sign out</Button>
       </div>
     );
