@@ -1014,6 +1014,89 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      apply_stock_movement: {
+        Args: {
+          p_actor: string
+          p_delta: number
+          p_note: string
+          p_product_pk: number
+          p_reference: string
+          p_type: string
+        }
+        Returns: number
+      }
+      approve_stock_count: {
+        Args: { p_actor: string; p_count_id: number }
+        Returns: undefined
+      }
+      assign_delivery: {
+        Args: { p_actor: string; p_order_id: number; p_rep_id: number }
+        Returns: undefined
+      }
+      create_delivery_handover: {
+        Args: {
+          p_attempt_ids: number[]
+          p_client_handover_id: string
+          p_date: string
+          p_declared: number
+          p_note: string
+          p_rep_id: number
+        }
+        Returns: Json
+      }
+      create_mobile_order: {
+        Args: {
+          p_client_order_id: string
+          p_collected_at: string
+          p_items: Json
+          p_location: Json
+          p_outlet_id: number
+          p_outlet_name: string
+          p_rep_id: number
+          p_rep_name: string
+          p_snapshot_id: string
+        }
+        Returns: Json
+      }
+      create_mobile_visit: {
+        Args: {
+          p_client_visit_id: string
+          p_location: Json
+          p_note: string
+          p_outlet_id: number
+          p_outlet_name: string
+          p_rep_id: number
+          p_rep_name: string
+          p_visit_type: string
+          p_visited_at: string
+        }
+        Returns: Json
+      }
+      create_purchase_order: {
+        Args: {
+          p_actor: string
+          p_date: string
+          p_invoice: string
+          p_items: Json
+          p_note: string
+          p_supplier: string
+        }
+        Returns: number
+      }
+      create_stock_count: {
+        Args: { p_actor: string; p_date: string }
+        Returns: number
+      }
+      create_web_order: {
+        Args: {
+          p_idempotency_key: string
+          p_items: Json
+          p_outlet_name: string
+          p_rep_name: string
+        }
+        Returns: Json
+      }
+      delete_product_guarded: { Args: { p_pk: number }; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1021,6 +1104,46 @@ export type Database = {
         }
         Returns: boolean
       }
+      import_catalog: {
+        Args: {
+          p_has_description: boolean
+          p_has_supplier: boolean
+          p_replace: boolean
+          p_rows: Json
+        }
+        Returns: Json
+      }
+      norm_text: { Args: { v: string }; Returns: string }
+      peek_next_product_id: { Args: never; Returns: string }
+      receive_purchase_order: {
+        Args: { p_actor: string; p_po_id: number; p_quantities: Json }
+        Returns: undefined
+      }
+      record_delivery_attempt: {
+        Args: {
+          p_cash: number
+          p_client_attempt_id: string
+          p_failure_reason: string
+          p_items: Json
+          p_location: Json
+          p_note: string
+          p_order_id: number
+          p_rep_id: number
+          p_result: string
+        }
+        Returns: Json
+      }
+      rep_label: { Args: { code: string; name: string }; Returns: string }
+      reserve_next_product_id: { Args: never; Returns: string }
+      resolve_outlet_id: {
+        Args: { p_create?: boolean; p_name: string }
+        Returns: number
+      }
+      reuse_product_id: {
+        Args: { p_data: Json; p_product_id: string }
+        Returns: number
+      }
+      seed_id_counter: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin"

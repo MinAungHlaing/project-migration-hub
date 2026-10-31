@@ -10,33 +10,509 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiActivityRouteImport } from './routes/api/activity'
+import { Route as ApiPriceHistoryRouteImport } from './routes/api/price-history'
+import { Route as ApiPricesRouteImport } from './routes/api/prices'
+import { Route as GalleryIndexRouteImport } from './routes/gallery.index'
+import { Route as GalleryCategoryRouteImport } from './routes/gallery.$category'
+import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
+import { Route as AuthenticatedAdminImagesRouteImport } from './routes/_authenticated/admin.images'
+import { Route as AuthenticatedAdminInventoryRouteImport } from './routes/_authenticated/admin.inventory'
+import { Route as AuthenticatedAdminRepsRouteImport } from './routes/_authenticated/admin.reps'
+import { Route as AuthenticatedAdminSalesReportRouteImport } from './routes/_authenticated/admin.sales-report'
+import { Route as AuthenticatedAdminUploadRouteImport } from './routes/_authenticated/admin.upload'
+import { Route as ApiImagesNameRouteImport } from './routes/api/images.$name'
+import { Route as ApiMobileCatalogRouteImport } from './routes/api/mobile/catalog'
+import { Route as ApiMobileLoginRouteImport } from './routes/api/mobile/login'
+import { Route as ApiMobileSyncRouteImport } from './routes/api/mobile/sync'
+import { Route as AuthenticatedAdminOrdersIndexRouteImport } from './routes/_authenticated/admin.orders.index'
+import { Route as AuthenticatedAdminOrdersIdRouteImport } from './routes/_authenticated/admin.orders.$id'
+import { Route as AuthenticatedAdminOutletsIndexRouteImport } from './routes/_authenticated/admin.outlets.index'
+import { Route as AuthenticatedAdminOutletsIdRouteImport } from './routes/_authenticated/admin.outlets.$id'
+import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
+import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
+import { Route as AuthenticatedAdminProductsNewRouteImport } from './routes/_authenticated/admin.products.new'
+import { Route as AuthenticatedAdminPurchasesIndexRouteImport } from './routes/_authenticated/admin.purchases.index'
+import { Route as AuthenticatedAdminPurchasesIdRouteImport } from './routes/_authenticated/admin.purchases.$id'
+import { Route as AuthenticatedAdminPurchasesNewRouteImport } from './routes/_authenticated/admin.purchases.new'
+import { Route as AuthenticatedAdminStockCountsIndexRouteImport } from './routes/_authenticated/admin.stock-counts.index'
+import { Route as AuthenticatedAdminStockCountsIdRouteImport } from './routes/_authenticated/admin.stock-counts.$id'
+import { Route as ApiMobileDeliveriesIndexRouteImport } from './routes/api/mobile/deliveries.index'
+import { Route as ApiMobileDeliveriesSyncRouteImport } from './routes/api/mobile/deliveries.sync'
+import { Route as ApiMobileHandoversSyncRouteImport } from './routes/api/mobile/handovers.sync'
+import { Route as ApiMobileVisitsSyncRouteImport } from './routes/api/mobile/visits.sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiActivityRoute = ApiActivityRouteImport.update({
+  id: '/api/activity',
+  path: '/api/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPriceHistoryRoute = ApiPriceHistoryRouteImport.update({
+  id: '/api/price-history',
+  path: '/api/price-history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPricesRoute = ApiPricesRouteImport.update({
+  id: '/api/prices',
+  path: '/api/prices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryIndexRoute = GalleryIndexRouteImport.update({
+  id: '/gallery/',
+  path: '/gallery/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryCategoryRoute = GalleryCategoryRouteImport.update({
+  id: '/gallery/$category',
+  path: '/gallery/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductSlugRoute = ProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminDeliveriesRoute =
+  AuthenticatedAdminDeliveriesRouteImport.update({
+    id: '/deliveries',
+    path: '/deliveries',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminImagesRoute =
+  AuthenticatedAdminImagesRouteImport.update({
+    id: '/images',
+    path: '/images',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminInventoryRoute =
+  AuthenticatedAdminInventoryRouteImport.update({
+    id: '/inventory',
+    path: '/inventory',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminRepsRoute = AuthenticatedAdminRepsRouteImport.update({
+  id: '/reps',
+  path: '/reps',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminSalesReportRoute =
+  AuthenticatedAdminSalesReportRouteImport.update({
+    id: '/sales-report',
+    path: '/sales-report',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminUploadRoute =
+  AuthenticatedAdminUploadRouteImport.update({
+    id: '/upload',
+    path: '/upload',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const ApiImagesNameRoute = ApiImagesNameRouteImport.update({
+  id: '/api/images/$name',
+  path: '/api/images/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileCatalogRoute = ApiMobileCatalogRouteImport.update({
+  id: '/api/mobile/catalog',
+  path: '/api/mobile/catalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileLoginRoute = ApiMobileLoginRouteImport.update({
+  id: '/api/mobile/login',
+  path: '/api/mobile/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileSyncRoute = ApiMobileSyncRouteImport.update({
+  id: '/api/mobile/sync',
+  path: '/api/mobile/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminOrdersIndexRoute =
+  AuthenticatedAdminOrdersIndexRouteImport.update({
+    id: '/orders/',
+    path: '/orders/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminOrdersIdRoute =
+  AuthenticatedAdminOrdersIdRouteImport.update({
+    id: '/orders/$id',
+    path: '/orders/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminOutletsIndexRoute =
+  AuthenticatedAdminOutletsIndexRouteImport.update({
+    id: '/outlets/',
+    path: '/outlets/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminOutletsIdRoute =
+  AuthenticatedAdminOutletsIdRouteImport.update({
+    id: '/outlets/$id',
+    path: '/outlets/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProductsIndexRoute =
+  AuthenticatedAdminProductsIndexRouteImport.update({
+    id: '/products/',
+    path: '/products/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProductsIdRoute =
+  AuthenticatedAdminProductsIdRouteImport.update({
+    id: '/products/$id',
+    path: '/products/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProductsNewRoute =
+  AuthenticatedAdminProductsNewRouteImport.update({
+    id: '/products/new',
+    path: '/products/new',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPurchasesIndexRoute =
+  AuthenticatedAdminPurchasesIndexRouteImport.update({
+    id: '/purchases/',
+    path: '/purchases/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPurchasesIdRoute =
+  AuthenticatedAdminPurchasesIdRouteImport.update({
+    id: '/purchases/$id',
+    path: '/purchases/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPurchasesNewRoute =
+  AuthenticatedAdminPurchasesNewRouteImport.update({
+    id: '/purchases/new',
+    path: '/purchases/new',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminStockCountsIndexRoute =
+  AuthenticatedAdminStockCountsIndexRouteImport.update({
+    id: '/stock-counts/',
+    path: '/stock-counts/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminStockCountsIdRoute =
+  AuthenticatedAdminStockCountsIdRouteImport.update({
+    id: '/stock-counts/$id',
+    path: '/stock-counts/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const ApiMobileDeliveriesIndexRoute =
+  ApiMobileDeliveriesIndexRouteImport.update({
+    id: '/api/mobile/deliveries/',
+    path: '/api/mobile/deliveries/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiMobileDeliveriesSyncRoute = ApiMobileDeliveriesSyncRouteImport.update({
+  id: '/api/mobile/deliveries/sync',
+  path: '/api/mobile/deliveries/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileHandoversSyncRoute = ApiMobileHandoversSyncRouteImport.update({
+  id: '/api/mobile/handovers/sync',
+  path: '/api/mobile/handovers/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileVisitsSyncRoute = ApiMobileVisitsSyncRouteImport.update({
+  id: '/api/mobile/visits/sync',
+  path: '/api/mobile/visits/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/api/activity': typeof ApiActivityRoute
+  '/api/price-history': typeof ApiPriceHistoryRoute
+  '/api/prices': typeof ApiPricesRoute
+  '/gallery/$category': typeof GalleryCategoryRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/gallery/': typeof GalleryIndexRoute
+  '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/images': typeof AuthenticatedAdminImagesRoute
+  '/admin/inventory': typeof AuthenticatedAdminInventoryRoute
+  '/admin/reps': typeof AuthenticatedAdminRepsRoute
+  '/admin/sales-report': typeof AuthenticatedAdminSalesReportRoute
+  '/admin/upload': typeof AuthenticatedAdminUploadRoute
+  '/api/images/$name': typeof ApiImagesNameRoute
+  '/api/mobile/catalog': typeof ApiMobileCatalogRoute
+  '/api/mobile/login': typeof ApiMobileLoginRoute
+  '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/orders/$id': typeof AuthenticatedAdminOrdersIdRoute
+  '/admin/outlets/$id': typeof AuthenticatedAdminOutletsIdRoute
+  '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
+  '/admin/purchases/$id': typeof AuthenticatedAdminPurchasesIdRoute
+  '/admin/purchases/new': typeof AuthenticatedAdminPurchasesNewRoute
+  '/admin/stock-counts/$id': typeof AuthenticatedAdminStockCountsIdRoute
+  '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
+  '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
+  '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/admin/orders/': typeof AuthenticatedAdminOrdersIndexRoute
+  '/admin/outlets/': typeof AuthenticatedAdminOutletsIndexRoute
+  '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
+  '/admin/purchases/': typeof AuthenticatedAdminPurchasesIndexRoute
+  '/admin/stock-counts/': typeof AuthenticatedAdminStockCountsIndexRoute
+  '/api/mobile/deliveries/': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/api/activity': typeof ApiActivityRoute
+  '/api/price-history': typeof ApiPriceHistoryRoute
+  '/api/prices': typeof ApiPricesRoute
+  '/gallery/$category': typeof GalleryCategoryRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/gallery': typeof GalleryIndexRoute
+  '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/images': typeof AuthenticatedAdminImagesRoute
+  '/admin/inventory': typeof AuthenticatedAdminInventoryRoute
+  '/admin/reps': typeof AuthenticatedAdminRepsRoute
+  '/admin/sales-report': typeof AuthenticatedAdminSalesReportRoute
+  '/admin/upload': typeof AuthenticatedAdminUploadRoute
+  '/api/images/$name': typeof ApiImagesNameRoute
+  '/api/mobile/catalog': typeof ApiMobileCatalogRoute
+  '/api/mobile/login': typeof ApiMobileLoginRoute
+  '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/orders/$id': typeof AuthenticatedAdminOrdersIdRoute
+  '/admin/outlets/$id': typeof AuthenticatedAdminOutletsIdRoute
+  '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
+  '/admin/purchases/$id': typeof AuthenticatedAdminPurchasesIdRoute
+  '/admin/purchases/new': typeof AuthenticatedAdminPurchasesNewRoute
+  '/admin/stock-counts/$id': typeof AuthenticatedAdminStockCountsIdRoute
+  '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
+  '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
+  '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/admin/orders': typeof AuthenticatedAdminOrdersIndexRoute
+  '/admin/outlets': typeof AuthenticatedAdminOutletsIndexRoute
+  '/admin/products': typeof AuthenticatedAdminProductsIndexRoute
+  '/admin/purchases': typeof AuthenticatedAdminPurchasesIndexRoute
+  '/admin/stock-counts': typeof AuthenticatedAdminStockCountsIndexRoute
+  '/api/mobile/deliveries': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/api/activity': typeof ApiActivityRoute
+  '/api/price-history': typeof ApiPriceHistoryRoute
+  '/api/prices': typeof ApiPricesRoute
+  '/gallery/$category': typeof GalleryCategoryRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/gallery/': typeof GalleryIndexRoute
+  '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/_authenticated/admin/images': typeof AuthenticatedAdminImagesRoute
+  '/_authenticated/admin/inventory': typeof AuthenticatedAdminInventoryRoute
+  '/_authenticated/admin/reps': typeof AuthenticatedAdminRepsRoute
+  '/_authenticated/admin/sales-report': typeof AuthenticatedAdminSalesReportRoute
+  '/_authenticated/admin/upload': typeof AuthenticatedAdminUploadRoute
+  '/api/images/$name': typeof ApiImagesNameRoute
+  '/api/mobile/catalog': typeof ApiMobileCatalogRoute
+  '/api/mobile/login': typeof ApiMobileLoginRoute
+  '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/orders/$id': typeof AuthenticatedAdminOrdersIdRoute
+  '/_authenticated/admin/outlets/$id': typeof AuthenticatedAdminOutletsIdRoute
+  '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/_authenticated/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
+  '/_authenticated/admin/purchases/$id': typeof AuthenticatedAdminPurchasesIdRoute
+  '/_authenticated/admin/purchases/new': typeof AuthenticatedAdminPurchasesNewRoute
+  '/_authenticated/admin/stock-counts/$id': typeof AuthenticatedAdminStockCountsIdRoute
+  '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
+  '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
+  '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/_authenticated/admin/orders/': typeof AuthenticatedAdminOrdersIndexRoute
+  '/_authenticated/admin/outlets/': typeof AuthenticatedAdminOutletsIndexRoute
+  '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
+  '/_authenticated/admin/purchases/': typeof AuthenticatedAdminPurchasesIndexRoute
+  '/_authenticated/admin/stock-counts/': typeof AuthenticatedAdminStockCountsIndexRoute
+  '/api/mobile/deliveries/': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/admin'
+    | '/api/activity'
+    | '/api/price-history'
+    | '/api/prices'
+    | '/gallery/$category'
+    | '/product/$slug'
+    | '/gallery/'
+    | '/admin/deliveries'
+    | '/admin/images'
+    | '/admin/inventory'
+    | '/admin/reps'
+    | '/admin/sales-report'
+    | '/admin/upload'
+    | '/api/images/$name'
+    | '/api/mobile/catalog'
+    | '/api/mobile/login'
+    | '/api/mobile/sync'
+    | '/admin/'
+    | '/admin/orders/$id'
+    | '/admin/outlets/$id'
+    | '/admin/products/$id'
+    | '/admin/products/new'
+    | '/admin/purchases/$id'
+    | '/admin/purchases/new'
+    | '/admin/stock-counts/$id'
+    | '/api/mobile/deliveries/sync'
+    | '/api/mobile/handovers/sync'
+    | '/api/mobile/visits/sync'
+    | '/admin/orders/'
+    | '/admin/outlets/'
+    | '/admin/products/'
+    | '/admin/purchases/'
+    | '/admin/stock-counts/'
+    | '/api/mobile/deliveries/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/reset-password'
+    | '/api/activity'
+    | '/api/price-history'
+    | '/api/prices'
+    | '/gallery/$category'
+    | '/product/$slug'
+    | '/gallery'
+    | '/admin/deliveries'
+    | '/admin/images'
+    | '/admin/inventory'
+    | '/admin/reps'
+    | '/admin/sales-report'
+    | '/admin/upload'
+    | '/api/images/$name'
+    | '/api/mobile/catalog'
+    | '/api/mobile/login'
+    | '/api/mobile/sync'
+    | '/admin'
+    | '/admin/orders/$id'
+    | '/admin/outlets/$id'
+    | '/admin/products/$id'
+    | '/admin/products/new'
+    | '/admin/purchases/$id'
+    | '/admin/purchases/new'
+    | '/admin/stock-counts/$id'
+    | '/api/mobile/deliveries/sync'
+    | '/api/mobile/handovers/sync'
+    | '/api/mobile/visits/sync'
+    | '/admin/orders'
+    | '/admin/outlets'
+    | '/admin/products'
+    | '/admin/purchases'
+    | '/admin/stock-counts'
+    | '/api/mobile/deliveries'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/reset-password'
+    | '/_authenticated/admin'
+    | '/api/activity'
+    | '/api/price-history'
+    | '/api/prices'
+    | '/gallery/$category'
+    | '/product/$slug'
+    | '/gallery/'
+    | '/_authenticated/admin/deliveries'
+    | '/_authenticated/admin/images'
+    | '/_authenticated/admin/inventory'
+    | '/_authenticated/admin/reps'
+    | '/_authenticated/admin/sales-report'
+    | '/_authenticated/admin/upload'
+    | '/api/images/$name'
+    | '/api/mobile/catalog'
+    | '/api/mobile/login'
+    | '/api/mobile/sync'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/orders/$id'
+    | '/_authenticated/admin/outlets/$id'
+    | '/_authenticated/admin/products/$id'
+    | '/_authenticated/admin/products/new'
+    | '/_authenticated/admin/purchases/$id'
+    | '/_authenticated/admin/purchases/new'
+    | '/_authenticated/admin/stock-counts/$id'
+    | '/api/mobile/deliveries/sync'
+    | '/api/mobile/handovers/sync'
+    | '/api/mobile/visits/sync'
+    | '/_authenticated/admin/orders/'
+    | '/_authenticated/admin/outlets/'
+    | '/_authenticated/admin/products/'
+    | '/_authenticated/admin/purchases/'
+    | '/_authenticated/admin/stock-counts/'
+    | '/api/mobile/deliveries/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiActivityRoute: typeof ApiActivityRoute
+  ApiPriceHistoryRoute: typeof ApiPriceHistoryRoute
+  ApiPricesRoute: typeof ApiPricesRoute
+  GalleryCategoryRoute: typeof GalleryCategoryRoute
+  ProductSlugRoute: typeof ProductSlugRoute
+  GalleryIndexRoute: typeof GalleryIndexRoute
+  ApiImagesNameRoute: typeof ApiImagesNameRoute
+  ApiMobileCatalogRoute: typeof ApiMobileCatalogRoute
+  ApiMobileLoginRoute: typeof ApiMobileLoginRoute
+  ApiMobileSyncRoute: typeof ApiMobileSyncRoute
+  ApiMobileDeliveriesSyncRoute: typeof ApiMobileDeliveriesSyncRoute
+  ApiMobileHandoversSyncRoute: typeof ApiMobileHandoversSyncRoute
+  ApiMobileVisitsSyncRoute: typeof ApiMobileVisitsSyncRoute
+  ApiMobileDeliveriesIndexRoute: typeof ApiMobileDeliveriesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +524,346 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/activity': {
+      id: '/api/activity'
+      path: '/api/activity'
+      fullPath: '/api/activity'
+      preLoaderRoute: typeof ApiActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/price-history': {
+      id: '/api/price-history'
+      path: '/api/price-history'
+      fullPath: '/api/price-history'
+      preLoaderRoute: typeof ApiPriceHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/prices': {
+      id: '/api/prices'
+      path: '/api/prices'
+      fullPath: '/api/prices'
+      preLoaderRoute: typeof ApiPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery/': {
+      id: '/gallery/'
+      path: '/gallery'
+      fullPath: '/gallery/'
+      preLoaderRoute: typeof GalleryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery/$category': {
+      id: '/gallery/$category'
+      path: '/gallery/$category'
+      fullPath: '/gallery/$category'
+      preLoaderRoute: typeof GalleryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/product/$slug': {
+      id: '/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof ProductSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/deliveries': {
+      id: '/_authenticated/admin/deliveries'
+      path: '/deliveries'
+      fullPath: '/admin/deliveries'
+      preLoaderRoute: typeof AuthenticatedAdminDeliveriesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/images': {
+      id: '/_authenticated/admin/images'
+      path: '/images'
+      fullPath: '/admin/images'
+      preLoaderRoute: typeof AuthenticatedAdminImagesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/inventory': {
+      id: '/_authenticated/admin/inventory'
+      path: '/inventory'
+      fullPath: '/admin/inventory'
+      preLoaderRoute: typeof AuthenticatedAdminInventoryRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/reps': {
+      id: '/_authenticated/admin/reps'
+      path: '/reps'
+      fullPath: '/admin/reps'
+      preLoaderRoute: typeof AuthenticatedAdminRepsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/sales-report': {
+      id: '/_authenticated/admin/sales-report'
+      path: '/sales-report'
+      fullPath: '/admin/sales-report'
+      preLoaderRoute: typeof AuthenticatedAdminSalesReportRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/upload': {
+      id: '/_authenticated/admin/upload'
+      path: '/upload'
+      fullPath: '/admin/upload'
+      preLoaderRoute: typeof AuthenticatedAdminUploadRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/api/images/$name': {
+      id: '/api/images/$name'
+      path: '/api/images/$name'
+      fullPath: '/api/images/$name'
+      preLoaderRoute: typeof ApiImagesNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/catalog': {
+      id: '/api/mobile/catalog'
+      path: '/api/mobile/catalog'
+      fullPath: '/api/mobile/catalog'
+      preLoaderRoute: typeof ApiMobileCatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/login': {
+      id: '/api/mobile/login'
+      path: '/api/mobile/login'
+      fullPath: '/api/mobile/login'
+      preLoaderRoute: typeof ApiMobileLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/sync': {
+      id: '/api/mobile/sync'
+      path: '/api/mobile/sync'
+      fullPath: '/api/mobile/sync'
+      preLoaderRoute: typeof ApiMobileSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/orders/': {
+      id: '/_authenticated/admin/orders/'
+      path: '/orders'
+      fullPath: '/admin/orders/'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/orders/$id': {
+      id: '/_authenticated/admin/orders/$id'
+      path: '/orders/$id'
+      fullPath: '/admin/orders/$id'
+      preLoaderRoute: typeof AuthenticatedAdminOrdersIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/outlets/': {
+      id: '/_authenticated/admin/outlets/'
+      path: '/outlets'
+      fullPath: '/admin/outlets/'
+      preLoaderRoute: typeof AuthenticatedAdminOutletsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/outlets/$id': {
+      id: '/_authenticated/admin/outlets/$id'
+      path: '/outlets/$id'
+      fullPath: '/admin/outlets/$id'
+      preLoaderRoute: typeof AuthenticatedAdminOutletsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/products/': {
+      id: '/_authenticated/admin/products/'
+      path: '/products'
+      fullPath: '/admin/products/'
+      preLoaderRoute: typeof AuthenticatedAdminProductsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/products/$id': {
+      id: '/_authenticated/admin/products/$id'
+      path: '/products/$id'
+      fullPath: '/admin/products/$id'
+      preLoaderRoute: typeof AuthenticatedAdminProductsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/products/new': {
+      id: '/_authenticated/admin/products/new'
+      path: '/products/new'
+      fullPath: '/admin/products/new'
+      preLoaderRoute: typeof AuthenticatedAdminProductsNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/purchases/': {
+      id: '/_authenticated/admin/purchases/'
+      path: '/purchases'
+      fullPath: '/admin/purchases/'
+      preLoaderRoute: typeof AuthenticatedAdminPurchasesIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/purchases/$id': {
+      id: '/_authenticated/admin/purchases/$id'
+      path: '/purchases/$id'
+      fullPath: '/admin/purchases/$id'
+      preLoaderRoute: typeof AuthenticatedAdminPurchasesIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/purchases/new': {
+      id: '/_authenticated/admin/purchases/new'
+      path: '/purchases/new'
+      fullPath: '/admin/purchases/new'
+      preLoaderRoute: typeof AuthenticatedAdminPurchasesNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/stock-counts/': {
+      id: '/_authenticated/admin/stock-counts/'
+      path: '/stock-counts'
+      fullPath: '/admin/stock-counts/'
+      preLoaderRoute: typeof AuthenticatedAdminStockCountsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/stock-counts/$id': {
+      id: '/_authenticated/admin/stock-counts/$id'
+      path: '/stock-counts/$id'
+      fullPath: '/admin/stock-counts/$id'
+      preLoaderRoute: typeof AuthenticatedAdminStockCountsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/api/mobile/deliveries/': {
+      id: '/api/mobile/deliveries/'
+      path: '/api/mobile/deliveries'
+      fullPath: '/api/mobile/deliveries/'
+      preLoaderRoute: typeof ApiMobileDeliveriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/deliveries/sync': {
+      id: '/api/mobile/deliveries/sync'
+      path: '/api/mobile/deliveries/sync'
+      fullPath: '/api/mobile/deliveries/sync'
+      preLoaderRoute: typeof ApiMobileDeliveriesSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/handovers/sync': {
+      id: '/api/mobile/handovers/sync'
+      path: '/api/mobile/handovers/sync'
+      fullPath: '/api/mobile/handovers/sync'
+      preLoaderRoute: typeof ApiMobileHandoversSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/visits/sync': {
+      id: '/api/mobile/visits/sync'
+      path: '/api/mobile/visits/sync'
+      fullPath: '/api/mobile/visits/sync'
+      preLoaderRoute: typeof ApiMobileVisitsSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
+  AuthenticatedAdminImagesRoute: typeof AuthenticatedAdminImagesRoute
+  AuthenticatedAdminInventoryRoute: typeof AuthenticatedAdminInventoryRoute
+  AuthenticatedAdminRepsRoute: typeof AuthenticatedAdminRepsRoute
+  AuthenticatedAdminSalesReportRoute: typeof AuthenticatedAdminSalesReportRoute
+  AuthenticatedAdminUploadRoute: typeof AuthenticatedAdminUploadRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminOrdersIdRoute: typeof AuthenticatedAdminOrdersIdRoute
+  AuthenticatedAdminOutletsIdRoute: typeof AuthenticatedAdminOutletsIdRoute
+  AuthenticatedAdminProductsIdRoute: typeof AuthenticatedAdminProductsIdRoute
+  AuthenticatedAdminProductsNewRoute: typeof AuthenticatedAdminProductsNewRoute
+  AuthenticatedAdminPurchasesIdRoute: typeof AuthenticatedAdminPurchasesIdRoute
+  AuthenticatedAdminPurchasesNewRoute: typeof AuthenticatedAdminPurchasesNewRoute
+  AuthenticatedAdminStockCountsIdRoute: typeof AuthenticatedAdminStockCountsIdRoute
+  AuthenticatedAdminOrdersIndexRoute: typeof AuthenticatedAdminOrdersIndexRoute
+  AuthenticatedAdminOutletsIndexRoute: typeof AuthenticatedAdminOutletsIndexRoute
+  AuthenticatedAdminProductsIndexRoute: typeof AuthenticatedAdminProductsIndexRoute
+  AuthenticatedAdminPurchasesIndexRoute: typeof AuthenticatedAdminPurchasesIndexRoute
+  AuthenticatedAdminStockCountsIndexRoute: typeof AuthenticatedAdminStockCountsIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
+  AuthenticatedAdminImagesRoute: AuthenticatedAdminImagesRoute,
+  AuthenticatedAdminInventoryRoute: AuthenticatedAdminInventoryRoute,
+  AuthenticatedAdminRepsRoute: AuthenticatedAdminRepsRoute,
+  AuthenticatedAdminSalesReportRoute: AuthenticatedAdminSalesReportRoute,
+  AuthenticatedAdminUploadRoute: AuthenticatedAdminUploadRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminOrdersIdRoute: AuthenticatedAdminOrdersIdRoute,
+  AuthenticatedAdminOutletsIdRoute: AuthenticatedAdminOutletsIdRoute,
+  AuthenticatedAdminProductsIdRoute: AuthenticatedAdminProductsIdRoute,
+  AuthenticatedAdminProductsNewRoute: AuthenticatedAdminProductsNewRoute,
+  AuthenticatedAdminPurchasesIdRoute: AuthenticatedAdminPurchasesIdRoute,
+  AuthenticatedAdminPurchasesNewRoute: AuthenticatedAdminPurchasesNewRoute,
+  AuthenticatedAdminStockCountsIdRoute: AuthenticatedAdminStockCountsIdRoute,
+  AuthenticatedAdminOrdersIndexRoute: AuthenticatedAdminOrdersIndexRoute,
+  AuthenticatedAdminOutletsIndexRoute: AuthenticatedAdminOutletsIndexRoute,
+  AuthenticatedAdminProductsIndexRoute: AuthenticatedAdminProductsIndexRoute,
+  AuthenticatedAdminPurchasesIndexRoute: AuthenticatedAdminPurchasesIndexRoute,
+  AuthenticatedAdminStockCountsIndexRoute:
+    AuthenticatedAdminStockCountsIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ApiActivityRoute: ApiActivityRoute,
+  ApiPriceHistoryRoute: ApiPriceHistoryRoute,
+  ApiPricesRoute: ApiPricesRoute,
+  GalleryCategoryRoute: GalleryCategoryRoute,
+  ProductSlugRoute: ProductSlugRoute,
+  GalleryIndexRoute: GalleryIndexRoute,
+  ApiImagesNameRoute: ApiImagesNameRoute,
+  ApiMobileCatalogRoute: ApiMobileCatalogRoute,
+  ApiMobileLoginRoute: ApiMobileLoginRoute,
+  ApiMobileSyncRoute: ApiMobileSyncRoute,
+  ApiMobileDeliveriesSyncRoute: ApiMobileDeliveriesSyncRoute,
+  ApiMobileHandoversSyncRoute: ApiMobileHandoversSyncRoute,
+  ApiMobileVisitsSyncRoute: ApiMobileVisitsSyncRoute,
+  ApiMobileDeliveriesIndexRoute: ApiMobileDeliveriesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
