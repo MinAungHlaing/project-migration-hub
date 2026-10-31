@@ -13,6 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiActivityRouteImport } from './routes/api/activity'
 import { Route as ApiPriceHistoryRouteImport } from './routes/api/price-history'
 import { Route as ApiPricesRouteImport } from './routes/api/prices'
+import { Route as GalleryIndexRouteImport } from './routes/gallery.index'
+import { Route as GalleryCategoryRouteImport } from './routes/gallery.$category'
+import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as ApiImagesNameRouteImport } from './routes/api/images.$name'
 import { Route as ApiMobileCatalogRouteImport } from './routes/api/mobile/catalog'
 import { Route as ApiMobileLoginRouteImport } from './routes/api/mobile/login'
@@ -40,6 +43,21 @@ const ApiPriceHistoryRoute = ApiPriceHistoryRouteImport.update({
 const ApiPricesRoute = ApiPricesRouteImport.update({
   id: '/api/prices',
   path: '/api/prices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryIndexRoute = GalleryIndexRouteImport.update({
+  id: '/gallery/',
+  path: '/gallery/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryCategoryRoute = GalleryCategoryRouteImport.update({
+  id: '/gallery/$category',
+  path: '/gallery/$category',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductSlugRoute = ProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiImagesNameRoute = ApiImagesNameRouteImport.update({
@@ -89,6 +107,9 @@ export interface FileRoutesByFullPath {
   '/api/activity': typeof ApiActivityRoute
   '/api/price-history': typeof ApiPriceHistoryRoute
   '/api/prices': typeof ApiPricesRoute
+  '/gallery/$category': typeof GalleryCategoryRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/gallery/': typeof GalleryIndexRoute
   '/api/images/$name': typeof ApiImagesNameRoute
   '/api/mobile/catalog': typeof ApiMobileCatalogRoute
   '/api/mobile/login': typeof ApiMobileLoginRoute
@@ -103,6 +124,9 @@ export interface FileRoutesByTo {
   '/api/activity': typeof ApiActivityRoute
   '/api/price-history': typeof ApiPriceHistoryRoute
   '/api/prices': typeof ApiPricesRoute
+  '/gallery/$category': typeof GalleryCategoryRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/gallery': typeof GalleryIndexRoute
   '/api/images/$name': typeof ApiImagesNameRoute
   '/api/mobile/catalog': typeof ApiMobileCatalogRoute
   '/api/mobile/login': typeof ApiMobileLoginRoute
@@ -118,6 +142,9 @@ export interface FileRoutesById {
   '/api/activity': typeof ApiActivityRoute
   '/api/price-history': typeof ApiPriceHistoryRoute
   '/api/prices': typeof ApiPricesRoute
+  '/gallery/$category': typeof GalleryCategoryRoute
+  '/product/$slug': typeof ProductSlugRoute
+  '/gallery/': typeof GalleryIndexRoute
   '/api/images/$name': typeof ApiImagesNameRoute
   '/api/mobile/catalog': typeof ApiMobileCatalogRoute
   '/api/mobile/login': typeof ApiMobileLoginRoute
@@ -134,6 +161,9 @@ export interface FileRouteTypes {
     | '/api/activity'
     | '/api/price-history'
     | '/api/prices'
+    | '/gallery/$category'
+    | '/product/$slug'
+    | '/gallery/'
     | '/api/images/$name'
     | '/api/mobile/catalog'
     | '/api/mobile/login'
@@ -148,6 +178,9 @@ export interface FileRouteTypes {
     | '/api/activity'
     | '/api/price-history'
     | '/api/prices'
+    | '/gallery/$category'
+    | '/product/$slug'
+    | '/gallery'
     | '/api/images/$name'
     | '/api/mobile/catalog'
     | '/api/mobile/login'
@@ -162,6 +195,9 @@ export interface FileRouteTypes {
     | '/api/activity'
     | '/api/price-history'
     | '/api/prices'
+    | '/gallery/$category'
+    | '/product/$slug'
+    | '/gallery/'
     | '/api/images/$name'
     | '/api/mobile/catalog'
     | '/api/mobile/login'
@@ -177,6 +213,9 @@ export interface RootRouteChildren {
   ApiActivityRoute: typeof ApiActivityRoute
   ApiPriceHistoryRoute: typeof ApiPriceHistoryRoute
   ApiPricesRoute: typeof ApiPricesRoute
+  GalleryCategoryRoute: typeof GalleryCategoryRoute
+  ProductSlugRoute: typeof ProductSlugRoute
+  GalleryIndexRoute: typeof GalleryIndexRoute
   ApiImagesNameRoute: typeof ApiImagesNameRoute
   ApiMobileCatalogRoute: typeof ApiMobileCatalogRoute
   ApiMobileLoginRoute: typeof ApiMobileLoginRoute
@@ -215,6 +254,27 @@ declare module '@tanstack/react-router' {
       path: '/api/prices'
       fullPath: '/api/prices'
       preLoaderRoute: typeof ApiPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery/': {
+      id: '/gallery/'
+      path: '/gallery'
+      fullPath: '/gallery/'
+      preLoaderRoute: typeof GalleryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery/$category': {
+      id: '/gallery/$category'
+      path: '/gallery/$category'
+      fullPath: '/gallery/$category'
+      preLoaderRoute: typeof GalleryCategoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/product/$slug': {
+      id: '/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/images/$name': {
@@ -281,6 +341,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiActivityRoute: ApiActivityRoute,
   ApiPriceHistoryRoute: ApiPriceHistoryRoute,
   ApiPricesRoute: ApiPricesRoute,
+  GalleryCategoryRoute: GalleryCategoryRoute,
+  ProductSlugRoute: ProductSlugRoute,
+  GalleryIndexRoute: GalleryIndexRoute,
   ApiImagesNameRoute: ApiImagesNameRoute,
   ApiMobileCatalogRoute: ApiMobileCatalogRoute,
   ApiMobileLoginRoute: ApiMobileLoginRoute,
