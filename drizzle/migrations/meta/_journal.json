@@ -36,6 +36,13 @@
       "when": 1793458679266,
       "tag": "0004_disable_uncontrolled_first_admin",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793459411704,
+      "tag": "0005_erp_staff_permission_foundation",
+      "breakpoints": true
     }
   ]
 }
