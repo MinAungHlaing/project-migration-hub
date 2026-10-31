@@ -1,0 +1,18 @@
+{
+  "source": "code-archive (Flask + SQLite, gtm_catalog)",
+  "capabilities": [
+    {"capability": "code: public catalog, product detail, gallery, order cart", "source": "app.py + templates", "outcome": "migrate", "status": "pending", "next_action": "rebuild in TanStack"},
+    {"capability": "code: admin panel (products, images, reps, orders, deliveries, outlets, inventory, stock counts, purchases, sales report, audit, Excel import/export)", "source": "app.py /admin/*", "outcome": "migrate", "status": "pending", "next_action": "rebuild in phases"},
+    {"capability": "schema", "source": "db.py (24 tables)", "outcome": "migrate", "status": "pending", "next_action": "create in Lovable Cloud"},
+    {"capability": "records", "source": "gtm_catalog.db (429 products, 237 price history, 913 activity, 3 orders, 3 outlets, 1 rep)", "outcome": "migrate", "status": "pending", "next_action": "sanitize and import"},
+    {"capability": "auth: admin login", "source": "single env-configured admin username/password", "outcome": "migrate", "status": "pending", "next_action": "Lovable auth with admin role"},
+    {"capability": "auth: sales rep mobile login", "source": "sales_reps.mobile_username/password_hash/token", "outcome": "migrate", "status": "pending", "next_action": "reps reset password on first sign-in; credential fields not copied"},
+    {"capability": "file bytes: product images", "source": "static/product-images (144 webp)", "outcome": "migrate", "status": "pending", "next_action": "upload to Cloud storage"},
+    {"capability": "public endpoints: /api/mobile/* used by Android app", "source": "app.py + mobile/android", "outcome": "preserve", "status": "pending", "next_action": "recreate as server routes"},
+    {"capability": "web push notifications", "source": "push.py, VAPID keys", "outcome": "preserve", "status": "pending", "next_action": "recreate; request new VAPID keys via secret form"},
+    {"capability": "PWA / offline orders", "source": "static/sw.js, offline-orders.js", "outcome": "migrate", "status": "pending", "next_action": "recreate"},
+    {"capability": "concepts/app prototype", "source": "concepts/app", "outcome": "undecided", "status": "pending", "next_action": "ask user"},
+    {"capability": "cutover", "source": "PythonAnywhere host", "outcome": "pending", "status": "pending", "next_action": "point Android app to new URL after verification"},
+    {"capability": "verification", "source": "-", "outcome": "pending", "status": "pending", "next_action": "after build"}
+  ]
+}
