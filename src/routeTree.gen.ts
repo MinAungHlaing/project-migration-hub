@@ -10,33 +10,181 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiActivityRouteImport } from './routes/api/activity'
+import { Route as ApiPriceHistoryRouteImport } from './routes/api/price-history'
+import { Route as ApiPricesRouteImport } from './routes/api/prices'
+import { Route as ApiImagesNameRouteImport } from './routes/api/images.$name'
+import { Route as ApiMobileCatalogRouteImport } from './routes/api/mobile/catalog'
+import { Route as ApiMobileLoginRouteImport } from './routes/api/mobile/login'
+import { Route as ApiMobileSyncRouteImport } from './routes/api/mobile/sync'
+import { Route as ApiMobileDeliveriesIndexRouteImport } from './routes/api/mobile/deliveries.index'
+import { Route as ApiMobileDeliveriesSyncRouteImport } from './routes/api/mobile/deliveries.sync'
+import { Route as ApiMobileHandoversSyncRouteImport } from './routes/api/mobile/handovers.sync'
+import { Route as ApiMobileVisitsSyncRouteImport } from './routes/api/mobile/visits.sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiActivityRoute = ApiActivityRouteImport.update({
+  id: '/api/activity',
+  path: '/api/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPriceHistoryRoute = ApiPriceHistoryRouteImport.update({
+  id: '/api/price-history',
+  path: '/api/price-history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPricesRoute = ApiPricesRouteImport.update({
+  id: '/api/prices',
+  path: '/api/prices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiImagesNameRoute = ApiImagesNameRouteImport.update({
+  id: '/api/images/$name',
+  path: '/api/images/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileCatalogRoute = ApiMobileCatalogRouteImport.update({
+  id: '/api/mobile/catalog',
+  path: '/api/mobile/catalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileLoginRoute = ApiMobileLoginRouteImport.update({
+  id: '/api/mobile/login',
+  path: '/api/mobile/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileSyncRoute = ApiMobileSyncRouteImport.update({
+  id: '/api/mobile/sync',
+  path: '/api/mobile/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileDeliveriesIndexRoute =
+  ApiMobileDeliveriesIndexRouteImport.update({
+    id: '/api/mobile/deliveries/',
+    path: '/api/mobile/deliveries/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiMobileDeliveriesSyncRoute = ApiMobileDeliveriesSyncRouteImport.update({
+  id: '/api/mobile/deliveries/sync',
+  path: '/api/mobile/deliveries/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileHandoversSyncRoute = ApiMobileHandoversSyncRouteImport.update({
+  id: '/api/mobile/handovers/sync',
+  path: '/api/mobile/handovers/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiMobileVisitsSyncRoute = ApiMobileVisitsSyncRouteImport.update({
+  id: '/api/mobile/visits/sync',
+  path: '/api/mobile/visits/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/activity': typeof ApiActivityRoute
+  '/api/price-history': typeof ApiPriceHistoryRoute
+  '/api/prices': typeof ApiPricesRoute
+  '/api/images/$name': typeof ApiImagesNameRoute
+  '/api/mobile/catalog': typeof ApiMobileCatalogRoute
+  '/api/mobile/login': typeof ApiMobileLoginRoute
+  '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
+  '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
+  '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/api/mobile/deliveries/': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/activity': typeof ApiActivityRoute
+  '/api/price-history': typeof ApiPriceHistoryRoute
+  '/api/prices': typeof ApiPricesRoute
+  '/api/images/$name': typeof ApiImagesNameRoute
+  '/api/mobile/catalog': typeof ApiMobileCatalogRoute
+  '/api/mobile/login': typeof ApiMobileLoginRoute
+  '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
+  '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
+  '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/api/mobile/deliveries': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/activity': typeof ApiActivityRoute
+  '/api/price-history': typeof ApiPriceHistoryRoute
+  '/api/prices': typeof ApiPricesRoute
+  '/api/images/$name': typeof ApiImagesNameRoute
+  '/api/mobile/catalog': typeof ApiMobileCatalogRoute
+  '/api/mobile/login': typeof ApiMobileLoginRoute
+  '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
+  '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
+  '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/api/mobile/deliveries/': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/activity'
+    | '/api/price-history'
+    | '/api/prices'
+    | '/api/images/$name'
+    | '/api/mobile/catalog'
+    | '/api/mobile/login'
+    | '/api/mobile/sync'
+    | '/api/mobile/deliveries/sync'
+    | '/api/mobile/handovers/sync'
+    | '/api/mobile/visits/sync'
+    | '/api/mobile/deliveries/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/activity'
+    | '/api/price-history'
+    | '/api/prices'
+    | '/api/images/$name'
+    | '/api/mobile/catalog'
+    | '/api/mobile/login'
+    | '/api/mobile/sync'
+    | '/api/mobile/deliveries/sync'
+    | '/api/mobile/handovers/sync'
+    | '/api/mobile/visits/sync'
+    | '/api/mobile/deliveries'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/activity'
+    | '/api/price-history'
+    | '/api/prices'
+    | '/api/images/$name'
+    | '/api/mobile/catalog'
+    | '/api/mobile/login'
+    | '/api/mobile/sync'
+    | '/api/mobile/deliveries/sync'
+    | '/api/mobile/handovers/sync'
+    | '/api/mobile/visits/sync'
+    | '/api/mobile/deliveries/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiActivityRoute: typeof ApiActivityRoute
+  ApiPriceHistoryRoute: typeof ApiPriceHistoryRoute
+  ApiPricesRoute: typeof ApiPricesRoute
+  ApiImagesNameRoute: typeof ApiImagesNameRoute
+  ApiMobileCatalogRoute: typeof ApiMobileCatalogRoute
+  ApiMobileLoginRoute: typeof ApiMobileLoginRoute
+  ApiMobileSyncRoute: typeof ApiMobileSyncRoute
+  ApiMobileDeliveriesSyncRoute: typeof ApiMobileDeliveriesSyncRoute
+  ApiMobileHandoversSyncRoute: typeof ApiMobileHandoversSyncRoute
+  ApiMobileVisitsSyncRoute: typeof ApiMobileVisitsSyncRoute
+  ApiMobileDeliveriesIndexRoute: typeof ApiMobileDeliveriesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +196,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/activity': {
+      id: '/api/activity'
+      path: '/api/activity'
+      fullPath: '/api/activity'
+      preLoaderRoute: typeof ApiActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/price-history': {
+      id: '/api/price-history'
+      path: '/api/price-history'
+      fullPath: '/api/price-history'
+      preLoaderRoute: typeof ApiPriceHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/prices': {
+      id: '/api/prices'
+      path: '/api/prices'
+      fullPath: '/api/prices'
+      preLoaderRoute: typeof ApiPricesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/images/$name': {
+      id: '/api/images/$name'
+      path: '/api/images/$name'
+      fullPath: '/api/images/$name'
+      preLoaderRoute: typeof ApiImagesNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/catalog': {
+      id: '/api/mobile/catalog'
+      path: '/api/mobile/catalog'
+      fullPath: '/api/mobile/catalog'
+      preLoaderRoute: typeof ApiMobileCatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/login': {
+      id: '/api/mobile/login'
+      path: '/api/mobile/login'
+      fullPath: '/api/mobile/login'
+      preLoaderRoute: typeof ApiMobileLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/sync': {
+      id: '/api/mobile/sync'
+      path: '/api/mobile/sync'
+      fullPath: '/api/mobile/sync'
+      preLoaderRoute: typeof ApiMobileSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/deliveries/': {
+      id: '/api/mobile/deliveries/'
+      path: '/api/mobile/deliveries'
+      fullPath: '/api/mobile/deliveries/'
+      preLoaderRoute: typeof ApiMobileDeliveriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/deliveries/sync': {
+      id: '/api/mobile/deliveries/sync'
+      path: '/api/mobile/deliveries/sync'
+      fullPath: '/api/mobile/deliveries/sync'
+      preLoaderRoute: typeof ApiMobileDeliveriesSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/handovers/sync': {
+      id: '/api/mobile/handovers/sync'
+      path: '/api/mobile/handovers/sync'
+      fullPath: '/api/mobile/handovers/sync'
+      preLoaderRoute: typeof ApiMobileHandoversSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/mobile/visits/sync': {
+      id: '/api/mobile/visits/sync'
+      path: '/api/mobile/visits/sync'
+      fullPath: '/api/mobile/visits/sync'
+      preLoaderRoute: typeof ApiMobileVisitsSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiActivityRoute: ApiActivityRoute,
+  ApiPriceHistoryRoute: ApiPriceHistoryRoute,
+  ApiPricesRoute: ApiPricesRoute,
+  ApiImagesNameRoute: ApiImagesNameRoute,
+  ApiMobileCatalogRoute: ApiMobileCatalogRoute,
+  ApiMobileLoginRoute: ApiMobileLoginRoute,
+  ApiMobileSyncRoute: ApiMobileSyncRoute,
+  ApiMobileDeliveriesSyncRoute: ApiMobileDeliveriesSyncRoute,
+  ApiMobileHandoversSyncRoute: ApiMobileHandoversSyncRoute,
+  ApiMobileVisitsSyncRoute: ApiMobileVisitsSyncRoute,
+  ApiMobileDeliveriesIndexRoute: ApiMobileDeliveriesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
