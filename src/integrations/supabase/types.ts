@@ -292,6 +292,153 @@ export type Database = {
           },
         ]
       }
+      erp_areas: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      erp_audit: {
+        Row: {
+          action: string
+          actor_id: string
+          created_at: string
+          details: Json
+          id: number
+          subject: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          created_at?: string
+          details?: Json
+          id?: number
+          subject: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          created_at?: string
+          details?: Json
+          id?: number
+          subject?: string
+        }
+        Relationships: []
+      }
+      erp_departments: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      erp_role_permissions: {
+        Row: {
+          permission: string
+          role_id: string
+        }
+        Insert: {
+          permission: string
+          role_id: string
+        }
+        Update: {
+          permission?: string
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "erp_role_permissions_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "erp_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      erp_roles: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          system_key: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          system_key?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          system_key?: string | null
+        }
+        Relationships: []
+      }
+      erp_staff_roles: {
+        Row: {
+          active: boolean
+          is_leader: boolean
+          rep_id: number | null
+          role_id: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          is_leader?: boolean
+          rep_id?: number | null
+          role_id: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          is_leader?: boolean
+          rep_id?: number | null
+          role_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "erp_staff_roles_rep_id_fkey"
+            columns: ["rep_id"]
+            isOneToOne: true
+            referencedRelation: "sales_reps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "erp_staff_roles_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "erp_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "erp_staff_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       id_counter: {
         Row: {
           id: number
@@ -687,6 +834,41 @@ export type Database = {
           wholesale_pct?: number | null
         }
         Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          department_id: string | null
+          display_name: string
+          id: string
+          language: string
+          team: string
+        }
+        Insert: {
+          created_at?: string
+          department_id?: string | null
+          display_name?: string
+          id: string
+          language?: string
+          team?: string
+        }
+        Update: {
+          created_at?: string
+          department_id?: string | null
+          display_name?: string
+          id?: string
+          language?: string
+          team?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "erp_departments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       purchase_order_items: {
         Row: {
@@ -1097,6 +1279,10 @@ export type Database = {
         Returns: Json
       }
       delete_product_guarded: { Args: { p_pk: number }; Returns: undefined }
+      erp_has_permission: {
+        Args: { p_permission: string; p_user: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
