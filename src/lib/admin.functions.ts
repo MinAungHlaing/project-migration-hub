@@ -3,7 +3,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { requireAdmin } from "./server-clients";
 import { hashPassword } from "./crypto";
 
-const admin = () => createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]);
 const fail = (e: { message?: string | undefined } | null | undefined): never => { throw new Error(e?.message || "Something went wrong."); };
 const nonNeg = (v: unknown, label: string) => {
   const n = Number(v);
@@ -12,14 +11,14 @@ const nonNeg = (v: unknown, label: string) => {
 };
 
 // ---------- session ----------
-export const whoAmI = admin().handler(async ({ context }) => {
+export const whoAmI = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { data } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
   const claims = context.claims as { email?: string | undefined };
   return { isAdmin: !!data, email: claims?.email ?? "" };
 });
 
 // ---------- dashboard ----------
-export const getDashboard = admin().handler(async ({ context }) => {
+export const getDashboard = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const start = new Date(); start.setUTCHours(0, 0, 0, 0);
   const [prods, today, recent, activity, pendingHandovers] = await Promise.all([
@@ -47,14 +46,14 @@ export const getDashboard = admin().handler(async ({ context }) => {
 });
 
 // ---------- products ----------
-export const listProductsAdmin = admin().handler(async ({ context }) => {
+export const listProductsAdmin = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const { data, error } = await db.from("products").select("*").order("id").range(0, 9999);
   if (error) fail(error);
   return (data ?? []).filter((p) => p.product_id || p.product_name);
 });
 
-export const getProductAdmin = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const getProductAdmin = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: p } = await db.from("products").select("*").eq("id", data.id).maybeSingle();
   if (!p) return { product: null, history: [], stock: 0 };
@@ -65,7 +64,7 @@ export const getProductAdmin = admin().inputValidator((d: { id: number }) => d).
   return { product: p, history: history ?? [], stock: Number(bal?.quantity ?? 0) };
 });
 
-export const getProductFormMeta = admin().handler(async ({ context }) => {
+export const getProductFormMeta = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const [{ data: next }, { data: oos }, { data: cats }] = await Promise.all([
     db.rpc("peek_next_product_id"),
@@ -106,7 +105,7 @@ function cleanProduct(d: ProductInput) {
   };
 }
 
-export const saveProduct = admin().inputValidator((d: ProductInput) => d).handler(async ({ data, context }) => {
+export const saveProduct = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: ProductInput) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const row = cleanProduct(data);
   if (data.id) {
@@ -132,7 +131,7 @@ export const saveProduct = admin().inputValidator((d: ProductInput) => d).handle
   return { id: ins!.id };
 });
 
-export const deleteProduct = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const deleteProduct = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: p } = await db.from("products").select("image_path").eq("id", data.id).maybeSingle();
   const { error } = await db.rpc("delete_product_guarded", { p_pk: data.id } as never);
@@ -142,7 +141,7 @@ export const deleteProduct = admin().inputValidator((d: { id: number }) => d).ha
 });
 
 /** Image arrives already resized/compressed to WebP in the browser; saved under the canonical Product-ID name. */
-export const uploadProductImage = admin().inputValidator((d: { id: number; base64: string }) => {
+export const uploadProductImage = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number; base64: string }) => {
   if (!d?.base64 || d.base64.length > 7_000_000) throw new Error("Image must be 5 MB or smaller.");
   return d;
 }).handler(async ({ data, context }) => {
@@ -157,7 +156,7 @@ export const uploadProductImage = admin().inputValidator((d: { id: number; base6
   return { image_path: name };
 });
 
-export const removeProductImage = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const removeProductImage = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: p } = await db.from("products").select("image_path").eq("id", data.id).maybeSingle();
   if (p?.image_path) await db.storage.from("product-images").remove([p.image_path]);
@@ -170,7 +169,7 @@ export type ImportRow = {
   category: string; status: string; description?: string | undefined; supplier?: string | undefined; base_price?: number | undefined | null; b2c?: number | undefined | null;
 };
 
-export const importCatalog = admin().inputValidator((d: { rows: ImportRow[]; replace: boolean; hasDescription: boolean; hasSupplier: boolean }) => {
+export const importCatalog = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { rows: ImportRow[]; replace: boolean; hasDescription: boolean; hasSupplier: boolean }) => {
   if (!Array.isArray(d?.rows) || !d.rows.length || d.rows.length > 5000) throw new Error("The sheet has no product rows.");
   return d;
 }).handler(async ({ data, context }) => {
@@ -182,14 +181,14 @@ export const importCatalog = admin().inputValidator((d: { rows: ImportRow[]; rep
   return res as { count: number; warnings: string[] };
 });
 
-export const getPriceHistoryAll = admin().handler(async ({ context }) => {
+export const getPriceHistoryAll = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const { data } = await db.from("price_history").select("*").order("changed_at", { ascending: false }).limit(5000);
   return data ?? [];
 });
 
 // ---------- sales reps ----------
-export const listReps = admin().handler(async ({ context }) => {
+export const listReps = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const [{ data: reps }, { data: creds }] = await Promise.all([
     db.from("sales_reps").select("*").order("code"),
@@ -201,7 +200,7 @@ export const listReps = admin().handler(async ({ context }) => {
   }));
 });
 
-export const saveRep = admin().inputValidator((d: { id?: number | undefined; code: string; name: string; active: boolean; mobile_username?: string | undefined; mobile_password?: string | undefined }) => d)
+export const saveRep = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id?: number | undefined; code: string; name: string; active: boolean; mobile_username?: string | undefined; mobile_password?: string | undefined }) => d)
   .handler(async ({ data, context }) => {
     const { db } = await requireAdmin(context);
     const code = (data.code ?? "").trim(), name = (data.name ?? "").trim();
@@ -234,7 +233,7 @@ export const saveRep = admin().inputValidator((d: { id?: number | undefined; cod
     return { id };
   });
 
-export const deleteRep = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const deleteRep = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   for (const t of ["delivery_assignments", "delivery_attempts", "delivery_handovers"] as const) {
     const { count } = await db.from(t).select("id", { count: "exact", head: true }).eq("rep_id", data.id);
@@ -246,7 +245,7 @@ export const deleteRep = admin().inputValidator((d: { id: number }) => d).handle
 });
 
 // ---------- orders ----------
-export const listOrders = admin().inputValidator((d: { rep?: string | undefined; date?: string | undefined; status?: string | undefined }) => d).handler(async ({ data, context }) => {
+export const listOrders = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { rep?: string | undefined; date?: string | undefined; status?: string | undefined }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   let q = db.from("orders").select("id, rep_name, outlet_name, outlet_id, status, total_retail, total_wholesale, created_at, price_mismatch, rep_id, client_order_id, delivery_rep_id").order("created_at", { ascending: false }).limit(1000);
   if (data.rep) q = q.eq("rep_name", data.rep);
@@ -256,7 +255,7 @@ export const listOrders = admin().inputValidator((d: { rep?: string | undefined;
   return { orders: orders ?? [], repNames: Array.from(new Set((reps ?? []).map((r) => r.rep_name))).sort() };
 });
 
-export const getOrder = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const getOrder = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: order } = await db.from("orders").select("*, outlets(id, name, area)").eq("id", data.id).maybeSingle();
   if (!order) return null;
@@ -268,7 +267,7 @@ export const getOrder = admin().inputValidator((d: { id: number }) => d).handler
   return { order, items: items ?? [], attempts: attempts ?? [], deliveryRep: delivery };
 });
 
-export const setOrderStatus = admin().inputValidator((d: { id: number; status: string }) => d).handler(async ({ data, context }) => {
+export const setOrderStatus = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number; status: string }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   if (!["New", "Fulfilled", "Cancelled"].includes(data.status)) throw new Error("Choose a valid order status.");
   if (data.status === "Fulfilled") {
@@ -285,7 +284,7 @@ export const setOrderStatus = admin().inputValidator((d: { id: number; status: s
   return { ok: true };
 });
 
-export const deleteOrder = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const deleteOrder = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { count } = await db.from("delivery_attempts").select("id", { count: "exact", head: true }).eq("order_id", data.id);
   if (count) throw new Error("An order with a delivery record cannot be deleted.");
@@ -296,7 +295,7 @@ export const deleteOrder = admin().inputValidator((d: { id: number }) => d).hand
 });
 
 // ---------- deliveries ----------
-export const getDeliveryBoard = admin().inputValidator((d: { date?: string | undefined }) => d).handler(async ({ data, context }) => {
+export const getDeliveryBoard = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { date?: string | undefined }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   let hq = db.from("delivery_handovers").select("*, sales_reps(code, name), delivery_handover_items(amount)").order("created_at", { ascending: false }).limit(200);
   if (data.date) hq = hq.eq("handover_date", data.date);
@@ -315,14 +314,14 @@ export const getDeliveryBoard = admin().inputValidator((d: { date?: string | und
   };
 });
 
-export const assignDelivery = admin().inputValidator((d: { orderId: number; repId: number }) => d).handler(async ({ data, context }) => {
+export const assignDelivery = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { orderId: number; repId: number }) => d).handler(async ({ data, context }) => {
   const { db, actor } = await requireAdmin(context);
   const { error } = await db.rpc("assign_delivery", { p_order_id: data.orderId, p_rep_id: data.repId, p_actor: actor } as never);
   if (error) fail(error);
   return { ok: true };
 });
 
-export const verifyHandover = admin().inputValidator((d: { id: number; received: number }) => d).handler(async ({ data, context }) => {
+export const verifyHandover = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number; received: number }) => d).handler(async ({ data, context }) => {
   const { db, actor } = await requireAdmin(context);
   const received = nonNeg(data.received, "Received cash");
   const { data: h } = await db.from("delivery_handovers").select("status").eq("id", data.id).maybeSingle();
@@ -334,7 +333,7 @@ export const verifyHandover = admin().inputValidator((d: { id: number; received:
 });
 
 // ---------- outlets ----------
-export const listOutlets = admin().handler(async ({ context }) => {
+export const listOutlets = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const [{ data: outlets }, { data: orders }, { data: visits }] = await Promise.all([
     db.from("outlets").select("*, outlet_aliases(id, alias)").order("name"),
@@ -353,7 +352,7 @@ export const listOutlets = admin().handler(async ({ context }) => {
   });
 });
 
-export const getOutlet = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const getOutlet = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: outlet } = await db.from("outlets").select("*, outlet_aliases(id, alias)").eq("id", data.id).maybeSingle();
   if (!outlet) return null;
@@ -365,7 +364,7 @@ export const getOutlet = admin().inputValidator((d: { id: number }) => d).handle
 });
 
 type OutletInput = { id?: number | undefined; name: string; area?: string | undefined; note?: string | undefined; shop_type?: string | undefined; credit_limit?: number | undefined | null; lat?: number | undefined | null; lng?: number | undefined | null };
-export const saveOutlet = admin().inputValidator((d: OutletInput) => d).handler(async ({ data, context }) => {
+export const saveOutlet = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: OutletInput) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const name = (data.name ?? "").replace(/\s+/g, " ").trim();
   if (!name || name.length > 200) throw new Error("Outlet name is required and must be 200 characters or fewer.");
@@ -386,7 +385,7 @@ export const saveOutlet = admin().inputValidator((d: OutletInput) => d).handler(
   return { id: ins!.id };
 });
 
-export const addOutletAlias = admin().inputValidator((d: { outletId: number; alias: string }) => d).handler(async ({ data, context }) => {
+export const addOutletAlias = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { outletId: number; alias: string }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const alias = (data.alias ?? "").replace(/\s+/g, " ").trim();
   if (!alias || alias.length > 200) throw new Error("Alias is required.");
@@ -395,14 +394,14 @@ export const addOutletAlias = admin().inputValidator((d: { outletId: number; ali
   return { ok: true };
 });
 
-export const deleteOutletAlias = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const deleteOutletAlias = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   await db.from("outlet_aliases").delete().eq("id", data.id);
   return { ok: true };
 });
 
 // ---------- sales report ----------
-export const getSalesReport = admin().inputValidator((d: { start: string; end: string; rep?: string | undefined }) => d).handler(async ({ data, context }) => {
+export const getSalesReport = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { start: string; end: string; rep?: string | undefined }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   let q = db.from("orders").select("id, rep_name, status, outlet_id, outlet_name, total_retail, created_at, order_items(product_id, product_name, quantity, line_retail)")
     .gte("created_at", `${data.start}T00:00:00Z`).lte("created_at", `${data.end}T23:59:59.999Z`).limit(10000);
@@ -436,7 +435,7 @@ export const getSalesReport = admin().inputValidator((d: { start: string; end: s
 });
 
 // ---------- inventory ----------
-export const getInventory = admin().handler(async ({ context }) => {
+export const getInventory = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const [{ data: products }, { data: balances }, { data: movements }] = await Promise.all([
     db.from("products").select("id, product_id, product_name, unit, category, supplier, status").neq("product_id", "").order("product_name").range(0, 9999),
@@ -450,7 +449,7 @@ export const getInventory = admin().handler(async ({ context }) => {
   };
 });
 
-export const recordMovement = admin().inputValidator((d: { productPk: number; quantity: number; type: "receipt" | "issue"; reference?: string | undefined; note?: string | undefined }) => d)
+export const recordMovement = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { productPk: number; quantity: number; type: "receipt" | "issue"; reference?: string | undefined; note?: string | undefined }) => d)
   .handler(async ({ data, context }) => {
     const { db, actor } = await requireAdmin(context);
     const q = Number(data.quantity);
@@ -464,7 +463,7 @@ export const recordMovement = admin().inputValidator((d: { productPk: number; qu
   });
 
 // ---------- stock counts ----------
-export const listStockCounts = admin().handler(async ({ context }) => {
+export const listStockCounts = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const { data } = await db.from("stock_counts").select("*, stock_count_lines(counted_quantity)").order("id", { ascending: false });
   return (data ?? []).map((c) => {
@@ -473,14 +472,14 @@ export const listStockCounts = admin().handler(async ({ context }) => {
   });
 });
 
-export const createStockCount = admin().handler(async ({ context }) => {
+export const createStockCount = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db, actor } = await requireAdmin(context);
   const { data, error } = await db.rpc("create_stock_count", { p_actor: actor, p_date: new Date().toISOString().slice(0, 10) } as never);
   if (error) fail(error);
   return { id: data as number };
 });
 
-export const getStockCount = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const getStockCount = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: count } = await db.from("stock_counts").select("*").eq("id", data.id).maybeSingle();
   if (!count) return null;
@@ -492,7 +491,7 @@ export const getStockCount = admin().inputValidator((d: { id: number }) => d).ha
   return { count, lines: (lines ?? []).map((l) => ({ ...l, current_quantity: m.get(l.product_pk) ?? 0 })) };
 });
 
-export const saveStockCount = admin().inputValidator((d: { id: number; counts: Record<string, string | number | null> }) => d).handler(async ({ data, context }) => {
+export const saveStockCount = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number; counts: Record<string, string | number | null> }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: c } = await db.from("stock_counts").select("status").eq("id", data.id).maybeSingle();
   if (!c) throw new Error("Stock count not found.");
@@ -507,14 +506,14 @@ export const saveStockCount = admin().inputValidator((d: { id: number; counts: R
   return { ok: true };
 });
 
-export const approveStockCount = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const approveStockCount = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db, actor } = await requireAdmin(context);
   const { error } = await db.rpc("approve_stock_count", { p_count_id: data.id, p_actor: actor } as never);
   if (error) fail(error);
   return { ok: true };
 });
 
-export const deleteStockCount = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const deleteStockCount = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: c } = await db.from("stock_counts").select("status").eq("id", data.id).maybeSingle();
   if (!c) throw new Error("Stock count not found.");
@@ -524,7 +523,7 @@ export const deleteStockCount = admin().inputValidator((d: { id: number }) => d)
 });
 
 // ---------- purchasing ----------
-export const listPurchaseOrders = admin().handler(async ({ context }) => {
+export const listPurchaseOrders = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
   const { db } = await requireAdmin(context);
   const { data } = await db.from("purchase_orders").select("*, purchase_order_items(ordered_quantity, received_quantity, unit_cost)").order("id", { ascending: false });
   return (data ?? []).map((p) => {
@@ -538,7 +537,7 @@ export const listPurchaseOrders = admin().handler(async ({ context }) => {
   });
 });
 
-export const createPurchaseOrder = admin().inputValidator((d: { supplier: string; orderDate: string; invoice?: string | undefined; note?: string | undefined; items: { product_pk: number; quantity: number; unit_cost: number }[] }) => d)
+export const createPurchaseOrder = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { supplier: string; orderDate: string; invoice?: string | undefined; note?: string | undefined; items: { product_pk: number; quantity: number; unit_cost: number }[] }) => d)
   .handler(async ({ data, context }) => {
     const { db, actor } = await requireAdmin(context);
     const supplier = (data.supplier ?? "").trim();
@@ -560,7 +559,7 @@ export const createPurchaseOrder = admin().inputValidator((d: { supplier: string
     return { id: id as number };
   });
 
-export const getPurchaseOrder = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const getPurchaseOrder = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: order } = await db.from("purchase_orders").select("*").eq("id", data.id).maybeSingle();
   if (!order) return null;
@@ -568,14 +567,14 @@ export const getPurchaseOrder = admin().inputValidator((d: { id: number }) => d)
   return { order, items: items ?? [] };
 });
 
-export const receivePurchaseOrder = admin().inputValidator((d: { id: number; quantities: Record<string, string | number> }) => d).handler(async ({ data, context }) => {
+export const receivePurchaseOrder = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number; quantities: Record<string, string | number> }) => d).handler(async ({ data, context }) => {
   const { db, actor } = await requireAdmin(context);
   const { error } = await db.rpc("receive_purchase_order", { p_po_id: data.id, p_quantities: data.quantities, p_actor: actor } as never);
   if (error) fail(error);
   return { ok: true };
 });
 
-export const cancelPurchaseOrder = admin().inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
+export const cancelPurchaseOrder = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: { id: number }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const { data: po } = await db.from("purchase_orders").select("status").eq("id", data.id).maybeSingle();
   if (!po) throw new Error("Purchase order not found.");
