@@ -22,6 +22,13 @@
       "when": 1793454562182,
       "tag": "0002_reset_id_sequences_after_import",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793456270816,
+      "tag": "0003_fix_delivery_temp_cleanup",
+      "breakpoints": true
     }
   ]
 }
