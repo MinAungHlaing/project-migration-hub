@@ -20,10 +20,15 @@ import { Route as ApiPricesRouteImport } from './routes/api/prices'
 import { Route as GalleryIndexRouteImport } from './routes/gallery.index'
 import { Route as GalleryCategoryRouteImport } from './routes/gallery.$category'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminImagesRouteImport } from './routes/_authenticated/admin.images'
 import { Route as ApiImagesNameRouteImport } from './routes/api/images.$name'
 import { Route as ApiMobileCatalogRouteImport } from './routes/api/mobile/catalog'
 import { Route as ApiMobileLoginRouteImport } from './routes/api/mobile/login'
 import { Route as ApiMobileSyncRouteImport } from './routes/api/mobile/sync'
+import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
+import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
+import { Route as AuthenticatedAdminProductsNewRouteImport } from './routes/_authenticated/admin.products.new'
 import { Route as ApiMobileDeliveriesIndexRouteImport } from './routes/api/mobile/deliveries.index'
 import { Route as ApiMobileDeliveriesSyncRouteImport } from './routes/api/mobile/deliveries.sync'
 import { Route as ApiMobileHandoversSyncRouteImport } from './routes/api/mobile/handovers.sync'
@@ -83,6 +88,17 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
   path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminImagesRoute =
+  AuthenticatedAdminImagesRouteImport.update({
+    id: '/images',
+    path: '/images',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const ApiImagesNameRoute = ApiImagesNameRouteImport.update({
   id: '/api/images/$name',
   path: '/api/images/$name',
@@ -103,6 +119,24 @@ const ApiMobileSyncRoute = ApiMobileSyncRouteImport.update({
   path: '/api/mobile/sync',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminProductsIndexRoute =
+  AuthenticatedAdminProductsIndexRouteImport.update({
+    id: '/products/',
+    path: '/products/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProductsIdRoute =
+  AuthenticatedAdminProductsIdRouteImport.update({
+    id: '/products/$id',
+    path: '/products/$id',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminProductsNewRoute =
+  AuthenticatedAdminProductsNewRouteImport.update({
+    id: '/products/new',
+    path: '/products/new',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const ApiMobileDeliveriesIndexRoute =
   ApiMobileDeliveriesIndexRouteImport.update({
     id: '/api/mobile/deliveries/',
@@ -129,40 +163,49 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/api/activity': typeof ApiActivityRoute
   '/api/price-history': typeof ApiPriceHistoryRoute
   '/api/prices': typeof ApiPricesRoute
   '/gallery/$category': typeof GalleryCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
   '/gallery/': typeof GalleryIndexRoute
+  '/admin/images': typeof AuthenticatedAdminImagesRoute
   '/api/images/$name': typeof ApiImagesNameRoute
   '/api/mobile/catalog': typeof ApiMobileCatalogRoute
   '/api/mobile/login': typeof ApiMobileLoginRoute
   '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
   '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
   '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
   '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
   '/api/mobile/deliveries/': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/api/activity': typeof ApiActivityRoute
   '/api/price-history': typeof ApiPriceHistoryRoute
   '/api/prices': typeof ApiPricesRoute
   '/gallery/$category': typeof GalleryCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
   '/gallery': typeof GalleryIndexRoute
+  '/admin/images': typeof AuthenticatedAdminImagesRoute
   '/api/images/$name': typeof ApiImagesNameRoute
   '/api/mobile/catalog': typeof ApiMobileCatalogRoute
   '/api/mobile/login': typeof ApiMobileLoginRoute
   '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
   '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
   '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
   '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/admin/products': typeof AuthenticatedAdminProductsIndexRoute
   '/api/mobile/deliveries': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRoutesById {
@@ -171,20 +214,25 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/api/activity': typeof ApiActivityRoute
   '/api/price-history': typeof ApiPriceHistoryRoute
   '/api/prices': typeof ApiPricesRoute
   '/gallery/$category': typeof GalleryCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
   '/gallery/': typeof GalleryIndexRoute
+  '/_authenticated/admin/images': typeof AuthenticatedAdminImagesRoute
   '/api/images/$name': typeof ApiImagesNameRoute
   '/api/mobile/catalog': typeof ApiMobileCatalogRoute
   '/api/mobile/login': typeof ApiMobileLoginRoute
   '/api/mobile/sync': typeof ApiMobileSyncRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/_authenticated/admin/products/new': typeof AuthenticatedAdminProductsNewRoute
   '/api/mobile/deliveries/sync': typeof ApiMobileDeliveriesSyncRoute
   '/api/mobile/handovers/sync': typeof ApiMobileHandoversSyncRoute
   '/api/mobile/visits/sync': typeof ApiMobileVisitsSyncRoute
+  '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
   '/api/mobile/deliveries/': typeof ApiMobileDeliveriesIndexRoute
 }
 export interface FileRouteTypes {
@@ -200,33 +248,42 @@ export interface FileRouteTypes {
     | '/gallery/$category'
     | '/product/$slug'
     | '/gallery/'
+    | '/admin/images'
     | '/api/images/$name'
     | '/api/mobile/catalog'
     | '/api/mobile/login'
     | '/api/mobile/sync'
+    | '/admin/'
+    | '/admin/products/$id'
+    | '/admin/products/new'
     | '/api/mobile/deliveries/sync'
     | '/api/mobile/handovers/sync'
     | '/api/mobile/visits/sync'
+    | '/admin/products/'
     | '/api/mobile/deliveries/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/reset-password'
-    | '/admin'
     | '/api/activity'
     | '/api/price-history'
     | '/api/prices'
     | '/gallery/$category'
     | '/product/$slug'
     | '/gallery'
+    | '/admin/images'
     | '/api/images/$name'
     | '/api/mobile/catalog'
     | '/api/mobile/login'
     | '/api/mobile/sync'
+    | '/admin'
+    | '/admin/products/$id'
+    | '/admin/products/new'
     | '/api/mobile/deliveries/sync'
     | '/api/mobile/handovers/sync'
     | '/api/mobile/visits/sync'
+    | '/admin/products'
     | '/api/mobile/deliveries'
   id:
     | '__root__'
@@ -241,13 +298,18 @@ export interface FileRouteTypes {
     | '/gallery/$category'
     | '/product/$slug'
     | '/gallery/'
+    | '/_authenticated/admin/images'
     | '/api/images/$name'
     | '/api/mobile/catalog'
     | '/api/mobile/login'
     | '/api/mobile/sync'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/products/$id'
+    | '/_authenticated/admin/products/new'
     | '/api/mobile/deliveries/sync'
     | '/api/mobile/handovers/sync'
     | '/api/mobile/visits/sync'
+    | '/_authenticated/admin/products/'
     | '/api/mobile/deliveries/'
   fileRoutesById: FileRoutesById
 }
@@ -351,6 +413,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/images': {
+      id: '/_authenticated/admin/images'
+      path: '/images'
+      fullPath: '/admin/images'
+      preLoaderRoute: typeof AuthenticatedAdminImagesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/api/images/$name': {
       id: '/api/images/$name'
       path: '/api/images/$name'
@@ -378,6 +454,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/mobile/sync'
       preLoaderRoute: typeof ApiMobileSyncRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin/products/': {
+      id: '/_authenticated/admin/products/'
+      path: '/products'
+      fullPath: '/admin/products/'
+      preLoaderRoute: typeof AuthenticatedAdminProductsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/products/$id': {
+      id: '/_authenticated/admin/products/$id'
+      path: '/products/$id'
+      fullPath: '/admin/products/$id'
+      preLoaderRoute: typeof AuthenticatedAdminProductsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/products/new': {
+      id: '/_authenticated/admin/products/new'
+      path: '/products/new'
+      fullPath: '/admin/products/new'
+      preLoaderRoute: typeof AuthenticatedAdminProductsNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
     }
     '/api/mobile/deliveries/': {
       id: '/api/mobile/deliveries/'
@@ -410,12 +507,31 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminImagesRoute: typeof AuthenticatedAdminImagesRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminProductsIdRoute: typeof AuthenticatedAdminProductsIdRoute
+  AuthenticatedAdminProductsNewRoute: typeof AuthenticatedAdminProductsNewRoute
+  AuthenticatedAdminProductsIndexRoute: typeof AuthenticatedAdminProductsIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminImagesRoute: AuthenticatedAdminImagesRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminProductsIdRoute: AuthenticatedAdminProductsIdRoute,
+  AuthenticatedAdminProductsNewRoute: AuthenticatedAdminProductsNewRoute,
+  AuthenticatedAdminProductsIndexRoute: AuthenticatedAdminProductsIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
