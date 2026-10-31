@@ -8,6 +8,13 @@
       "when": 1793454337288,
       "tag": "0000_gtm_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793454482871,
+      "tag": "0001_gtm_functions",
+      "breakpoints": true
     }
   ]
 }
