@@ -29,6 +29,13 @@
       "when": 1793456270816,
       "tag": "0003_fix_delivery_temp_cleanup",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793458679266,
+      "tag": "0004_disable_uncontrolled_first_admin",
+      "breakpoints": true
     }
   ]
 }
