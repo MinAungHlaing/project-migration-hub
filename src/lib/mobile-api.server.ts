@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Server-only logic for the Android field app API (/api/mobile/*). Contract preserved from the original Flask app.
 import { adminClient } from "./server-clients";
 import { randomToken, sha256Hex, verifyPassword } from "./crypto";
@@ -5,10 +6,10 @@ import { randomToken, sha256Hex, verifyPassword } from "./crypto";
 export const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "content-type": "application/json" } });
 
-export async function readJson(request: Request): Promise<Record<string, unknown>> {
+export async function readJson(request: Request): Promise<any> {
   try {
     const b = await request.json();
-    return b && typeof b === "object" && !Array.isArray(b) ? (b as Record<string, unknown>) : {};
+    return b && typeof b === "object" && !Array.isArray(b) ? b : {};
   } catch {
     return {};
   }
@@ -34,7 +35,7 @@ export async function getMobileRep(request: Request): Promise<Rep | null> {
   return rep as Rep;
 }
 
-export async function login(body: Record<string, unknown>) {
+export async function login(body: any) {
   const u = body.username, p = body.password;
   if (typeof u !== "string" || typeof p !== "string" || !u.trim() || !p) return json({ error: "Username and password are required." }, 400);
   const db = await adminClient();
@@ -83,7 +84,7 @@ function isoWithTz(v: unknown): string | null {
 function validLocation(v: unknown): Record<string, number> | null | "invalid" {
   if (v == null) return null;
   if (typeof v !== "object") return "invalid";
-  const o = v as Record<string, unknown>;
+  const o = v as any;
   const lat = o.latitude, lng = o.longitude, acc = o.accuracy;
   if (typeof lat !== "number" || typeof lng !== "number" || !isFinite(lat) || !isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) return "invalid";
   const out: Record<string, number> = { latitude: lat, longitude: lng };
@@ -101,12 +102,12 @@ function optId(v: unknown): number | null | "invalid" {
   return Number.isInteger(n) && n >= 1 ? n : "invalid";
 }
 
-export async function syncOrders(rep: Rep, body: Record<string, unknown>) {
+export async function syncOrders(rep: Rep, body: any) {
   const orders = body.orders;
   if (!Array.isArray(orders) || !orders.length || orders.length > 50) return json({ error: "Provide between 1 and 50 orders." }, 400);
   const db = await adminClient();
   const results = [];
-  for (const o of orders as Record<string, unknown>[]) {
+  for (const o of orders as any[]) {
     if (!o || typeof o !== "object") { results.push({ ok: false, error: "Invalid order payload." }); continue; }
     const cid = o.client_order_id;
     const fail = (error: string) => results.push({ client_order_id: cid, ok: false, error });
@@ -131,12 +132,12 @@ export async function syncOrders(rep: Rep, body: Record<string, unknown>) {
   return json({ results });
 }
 
-export async function syncVisits(rep: Rep, body: Record<string, unknown>) {
+export async function syncVisits(rep: Rep, body: any) {
   const visits = body.visits;
   if (!Array.isArray(visits) || !visits.length || visits.length > 50) return json({ error: "Provide between 1 and 50 visits." }, 400);
   const db = await adminClient();
   const results = [];
-  for (const v of visits as Record<string, unknown>[]) {
+  for (const v of visits as any[]) {
     if (!v || typeof v !== "object") { results.push({ ok: false, error: "Invalid visit payload." }); continue; }
     const cid = v.client_visit_id;
     const fail = (error: string) => results.push({ client_visit_id: cid, ok: false, error });
@@ -192,18 +193,18 @@ export async function deliveries(rep: Rep, url: URL) {
     .eq("rep_id", rep.id).eq("result", "delivered").gt("cash_collected", 0).order("created_at");
   if (date) pq = pq.gte("created_at", `${date}T00:00:00Z`).lt("created_at", `${date}T23:59:59.999Z`);
   const { data: pend } = await pq;
-  const pending = ((pend ?? []) as { id: number; order_id: number; cash_collected: number; created_at: string; orders: { outlet_name: string } | null; delivery_handover_items: unknown[] }[])
+  const pending = ((pend ?? []) as unknown as { id: number; order_id: number; cash_collected: number; created_at: string; orders: { outlet_name: string } | null; delivery_handover_items: unknown[] }[])
     .filter((p) => !p.delivery_handover_items?.length)
     .map((p) => ({ id: p.id, order_id: p.order_id, cash_collected: Number(p.cash_collected), created_at: p.created_at, outlet_name: p.orders?.outlet_name ?? "" }));
   return json({ orders: result, pending_cash: pending, pending_cash_total: pending.reduce((s, p) => s + p.cash_collected, 0) });
 }
 
-export async function syncDeliveries(rep: Rep, body: Record<string, unknown>) {
+export async function syncDeliveries(rep: Rep, body: any) {
   const attempts = body.attempts;
   if (!Array.isArray(attempts) || !attempts.length || attempts.length > 50) return json({ error: "Provide between 1 and 50 delivery attempts." }, 400);
   const db = await adminClient();
   const results = [];
-  for (const a of attempts as Record<string, unknown>[]) {
+  for (const a of attempts as any[]) {
     if (!a || typeof a !== "object") { results.push({ ok: false, error: "Invalid delivery payload." }); continue; }
     const cid = a.client_attempt_id;
     const fail = (error: string) => results.push({ client_attempt_id: cid, ok: false, error });
@@ -232,12 +233,12 @@ export async function syncDeliveries(rep: Rep, body: Record<string, unknown>) {
   return json({ results });
 }
 
-export async function syncHandovers(rep: Rep, body: Record<string, unknown>) {
+export async function syncHandovers(rep: Rep, body: any) {
   const handovers = body.handovers;
   if (!Array.isArray(handovers) || !handovers.length || handovers.length > 20) return json({ error: "Provide between 1 and 20 handovers." }, 400);
   const db = await adminClient();
   const results = [];
-  for (const h of handovers as Record<string, unknown>[]) {
+  for (const h of handovers as any[]) {
     if (!h || typeof h !== "object") { results.push({ ok: false, error: "Invalid handover payload." }); continue; }
     const cid = h.client_handover_id;
     const fail = (error: string) => results.push({ client_handover_id: cid, ok: false, error });
