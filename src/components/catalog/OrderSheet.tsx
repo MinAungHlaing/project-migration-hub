@@ -24,9 +24,9 @@ export function OrderSheet({ reps }: { reps: Rep[] }) {
 
   useEffect(() => { setRep(localStorage.getItem("gtm-rep") || ""); }, []);
 
-  async function send() {
-    if (!rep) return toast.error("Please select a sales rep.");
-    if (!outlet.trim()) return toast.error("Outlet name is required.");
+  async function send(): Promise<void> {
+    if (!rep) { toast.error("Please select a sales rep."); return; }
+    if (!outlet.trim()) { toast.error("Outlet name is required."); return; }
     setBusy(true);
     try {
       const key = sessionStorage.getItem("gtm-order-key") || crypto.randomUUID();

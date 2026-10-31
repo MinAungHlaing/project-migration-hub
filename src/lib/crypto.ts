@@ -34,7 +34,7 @@ export async function hashPassword(password: string) {
 export async function verifyPassword(password: string, stored: string | null | undefined) {
   if (!stored) return false;
   const [scheme, iterS, saltS, hashHex] = stored.split("$");
-  if (scheme !== "pbkdf2") return false;
+  if (scheme !== "pbkdf2" || !saltS || !hashHex) return false;
   const salt = Uint8Array.from(atob(saltS.replace(/-/g, "+").replace(/_/g, "/") + "==".slice(0, (4 - (saltS.length % 4)) % 4)), (c) => c.charCodeAt(0));
   const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
   const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt, iterations: Number(iterS) }, key, 256);

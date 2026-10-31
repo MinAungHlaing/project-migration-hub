@@ -4,7 +4,7 @@ import { requireAdmin } from "./server-clients";
 import { hashPassword } from "./crypto";
 
 const admin = () => createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]);
-const fail = (e: { message?: string } | null | undefined): never => { throw new Error(e?.message || "Something went wrong."); };
+const fail = (e: { message?: string | undefined } | null | undefined): never => { throw new Error(e?.message || "Something went wrong."); };
 const nonNeg = (v: unknown, label: string) => {
   const n = Number(v);
   if (typeof v === "boolean" || v === "" || v == null || !isFinite(n) || n < 0) throw new Error(`${label} must be zero or greater.`);
@@ -14,7 +14,7 @@ const nonNeg = (v: unknown, label: string) => {
 // ---------- session ----------
 export const whoAmI = admin().handler(async ({ context }) => {
   const { data } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
-  const claims = context.claims as { email?: string };
+  const claims = context.claims as { email?: string | undefined };
   return { isAdmin: !!data, email: claims?.email ?? "" };
 });
 
@@ -81,9 +81,9 @@ export const getProductFormMeta = admin().handler(async ({ context }) => {
 });
 
 type ProductInput = {
-  id?: number; reuse_product_id?: string; product_id?: string; product_name: string; upc?: number; unit?: string;
-  retail: number; wholesale: number; base_price?: number | null; b2c?: number | null; category?: string; status?: string;
-  description?: string; supplier?: string;
+  id?: number | undefined; reuse_product_id?: string | undefined; product_id?: string | undefined; product_name: string; upc?: number | undefined; unit?: string | undefined;
+  retail: number; wholesale: number; base_price?: number | undefined | null; b2c?: number | undefined | null; category?: string | undefined; status?: string | undefined;
+  description?: string | undefined; supplier?: string | undefined;
 };
 
 function cleanProduct(d: ProductInput) {
@@ -167,7 +167,7 @@ export const removeProductImage = admin().inputValidator((d: { id: number }) => 
 
 export type ImportRow = {
   product_id: string; product_name: string; upc: number; unit: string; retail: number; wholesale: number;
-  category: string; status: string; description?: string; supplier?: string; base_price?: number | null; b2c?: number | null;
+  category: string; status: string; description?: string | undefined; supplier?: string | undefined; base_price?: number | undefined | null; b2c?: number | undefined | null;
 };
 
 export const importCatalog = admin().inputValidator((d: { rows: ImportRow[]; replace: boolean; hasDescription: boolean; hasSupplier: boolean }) => {
@@ -201,7 +201,7 @@ export const listReps = admin().handler(async ({ context }) => {
   }));
 });
 
-export const saveRep = admin().inputValidator((d: { id?: number; code: string; name: string; active: boolean; mobile_username?: string; mobile_password?: string }) => d)
+export const saveRep = admin().inputValidator((d: { id?: number | undefined; code: string; name: string; active: boolean; mobile_username?: string | undefined; mobile_password?: string | undefined }) => d)
   .handler(async ({ data, context }) => {
     const { db } = await requireAdmin(context);
     const code = (data.code ?? "").trim(), name = (data.name ?? "").trim();
@@ -246,7 +246,7 @@ export const deleteRep = admin().inputValidator((d: { id: number }) => d).handle
 });
 
 // ---------- orders ----------
-export const listOrders = admin().inputValidator((d: { rep?: string; date?: string; status?: string }) => d).handler(async ({ data, context }) => {
+export const listOrders = admin().inputValidator((d: { rep?: string | undefined; date?: string | undefined; status?: string | undefined }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   let q = db.from("orders").select("id, rep_name, outlet_name, outlet_id, status, total_retail, total_wholesale, created_at, price_mismatch, rep_id, client_order_id, delivery_rep_id").order("created_at", { ascending: false }).limit(1000);
   if (data.rep) q = q.eq("rep_name", data.rep);
@@ -296,7 +296,7 @@ export const deleteOrder = admin().inputValidator((d: { id: number }) => d).hand
 });
 
 // ---------- deliveries ----------
-export const getDeliveryBoard = admin().inputValidator((d: { date?: string }) => d).handler(async ({ data, context }) => {
+export const getDeliveryBoard = admin().inputValidator((d: { date?: string | undefined }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   let hq = db.from("delivery_handovers").select("*, sales_reps(code, name), delivery_handover_items(amount)").order("created_at", { ascending: false }).limit(200);
   if (data.date) hq = hq.eq("handover_date", data.date);
@@ -364,7 +364,7 @@ export const getOutlet = admin().inputValidator((d: { id: number }) => d).handle
   return { outlet, orders: orders ?? [], visits: visits ?? [] };
 });
 
-type OutletInput = { id?: number; name: string; area?: string; note?: string; shop_type?: string; credit_limit?: number | null; lat?: number | null; lng?: number | null };
+type OutletInput = { id?: number | undefined; name: string; area?: string | undefined; note?: string | undefined; shop_type?: string | undefined; credit_limit?: number | undefined | null; lat?: number | undefined | null; lng?: number | undefined | null };
 export const saveOutlet = admin().inputValidator((d: OutletInput) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   const name = (data.name ?? "").replace(/\s+/g, " ").trim();
@@ -402,7 +402,7 @@ export const deleteOutletAlias = admin().inputValidator((d: { id: number }) => d
 });
 
 // ---------- sales report ----------
-export const getSalesReport = admin().inputValidator((d: { start: string; end: string; rep?: string }) => d).handler(async ({ data, context }) => {
+export const getSalesReport = admin().inputValidator((d: { start: string; end: string; rep?: string | undefined }) => d).handler(async ({ data, context }) => {
   const { db } = await requireAdmin(context);
   let q = db.from("orders").select("id, rep_name, status, outlet_id, outlet_name, total_retail, created_at, order_items(product_id, product_name, quantity, line_retail)")
     .gte("created_at", `${data.start}T00:00:00Z`).lte("created_at", `${data.end}T23:59:59.999Z`).limit(10000);
@@ -450,7 +450,7 @@ export const getInventory = admin().handler(async ({ context }) => {
   };
 });
 
-export const recordMovement = admin().inputValidator((d: { productPk: number; quantity: number; type: "receipt" | "issue"; reference?: string; note?: string }) => d)
+export const recordMovement = admin().inputValidator((d: { productPk: number; quantity: number; type: "receipt" | "issue"; reference?: string | undefined; note?: string | undefined }) => d)
   .handler(async ({ data, context }) => {
     const { db, actor } = await requireAdmin(context);
     const q = Number(data.quantity);
@@ -538,7 +538,7 @@ export const listPurchaseOrders = admin().handler(async ({ context }) => {
   });
 });
 
-export const createPurchaseOrder = admin().inputValidator((d: { supplier: string; orderDate: string; invoice?: string; note?: string; items: { product_pk: number; quantity: number; unit_cost: number }[] }) => d)
+export const createPurchaseOrder = admin().inputValidator((d: { supplier: string; orderDate: string; invoice?: string | undefined; note?: string | undefined; items: { product_pk: number; quantity: number; unit_cost: number }[] }) => d)
   .handler(async ({ data, context }) => {
     const { db, actor } = await requireAdmin(context);
     const supplier = (data.supplier ?? "").trim();

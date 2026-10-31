@@ -26,7 +26,7 @@ export async function getMobileRep(request: Request): Promise<Rep | null> {
   const auth = request.headers.get("authorization") ?? "";
   const m = auth.match(/^Bearer\s+(.+)$/i);
   if (!m) return null;
-  const hash = await sha256Hex(m[1].trim());
+  const hash = await sha256Hex((m[1] ?? "").trim());
   const db = await adminClient();
   const { data: cred } = await db.from("rep_credentials").select("rep_id").eq("token_hash", hash).maybeSingle();
   if (!cred) return null;
@@ -90,7 +90,7 @@ function validLocation(v: unknown): Record<string, number> | null | "invalid" {
   const out: Record<string, number> = { latitude: lat, longitude: lng };
   if (acc != null) {
     if (typeof acc !== "number" || !isFinite(acc) || acc < 0) return "invalid";
-    out.accuracy = acc;
+    out["accuracy"] = acc;
   }
   return out;
 }

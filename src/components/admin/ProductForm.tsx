@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { getProductFormMeta } from "@/lib/admin.functions";
 
 export type ProductValues = {
-  id?: number; product_id?: string; reuse_product_id?: string; product_name: string; upc: string; unit: string; retail: string; wholesale: string;
+  id?: number | undefined; product_id?: string | undefined; reuse_product_id?: string | undefined; product_name: string; upc: string; unit: string; retail: string; wholesale: string;
   base_price: string; b2c: string; category: string; status: string; description: string; supplier: string;
 };
 
