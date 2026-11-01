@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { duplicateIds, missingColumns, normaliseRows, pricingErrors } from "@/lib/catalog-import";
 import { hashPassword, verifyPassword } from "@/lib/crypto";
 import { productSlug, repLabel } from "@/lib/format";
+import { translate } from "@/lib/catalog-language";
 
 const row = (o: Record<string, unknown>) => ({ "Product ID": "GTM - 0001", "Product Name": "Rice", Status: "In Stock", Supplier: "ACME", "Base Price": 100, B2C: 120, Retail: 130, Wholesale: 110, ...o });
 
@@ -38,6 +39,7 @@ describe("identity helpers", () => {
   it("builds rep labels as 'CODE (Name)'", () => {
     expect(repLabel("T-1", "Myu Latt Aung")).toBe("T-1 (Myu Latt Aung)");
   });
+
   it("builds product URL slugs without spaces", () => {
     expect(productSlug("GTM - 0230")).toBe("GTM-0230");
   });
@@ -45,5 +47,15 @@ describe("identity helpers", () => {
     const h = await hashPassword("correct horse");
     expect(await verifyPassword("correct horse", h)).toBe(true);
     expect(await verifyPassword("wrong", h)).toBe(false);
+  });
+});
+
+describe("catalog language", () => {
+  it("translates storefront controls in English and Burmese", () => {
+    expect(translate("en", "catalog.search")).toBe("Search by product name, item ID, category, or barcode");
+    expect(translate("my", "catalog.search")).toContain("ရှာပါ");
+  });
+  it("falls back to the key for untranslated content", () => {
+    expect(translate("my", "product.dynamic-name")).toBe("product.dynamic-name");
   });
 });

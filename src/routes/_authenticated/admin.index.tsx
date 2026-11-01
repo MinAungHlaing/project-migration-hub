@@ -5,16 +5,19 @@ import { Button } from "@/components/ui/button";
 import { getDashboard } from "@/lib/admin.functions";
 import { PageHeader, Stat, Panel, Badge, Table, Empty } from "@/components/admin/kit";
 import { ks, timeAgo, dateTime } from "@/lib/format";
+import { isLocalDemo, localDemoDashboard } from "@/lib/local-demo";
 
 export const Route = createFileRoute("/_authenticated/admin/")({ component: Dashboard });
 
 function Dashboard() {
-  const { data } = useQuery({ queryKey: ["dashboard"], queryFn: () => getDashboard() });
+  const { data: liveData } = useQuery({ queryKey: ["dashboard"], queryFn: () => getDashboard(), enabled: !isLocalDemo });
+  const data = isLocalDemo ? localDemoDashboard : liveData;
   const s = data?.stats;
   return (
     <>
+      {isLocalDemo && <div className="mb-6 rounded-lg border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-950 dark:text-amber-100">Local demo — sample data only. This dashboard is read-only; nothing is saved or sent to a backend.</div>}
       <PageHeader title="Good to see you." sub="Keep your catalog accurate, your team moving, and today's orders under control."
-        actions={<>
+        actions={!isLocalDemo && <>
           <Button asChild><Link to="/admin/products/new"><Plus className="size-4" />Add product</Link></Button>
           <Button asChild variant="outline"><Link to="/admin/upload"><Upload className="size-4" />Upload catalog</Link></Button>
           <Button asChild variant="outline"><Link to="/"><ExternalLink className="size-4" />View catalog</Link></Button>
@@ -26,12 +29,12 @@ function Dashboard() {
         <Stat label="Missing photos" value={s?.missingImages ?? "–"} hint={`${s?.pendingHandovers ?? 0} cash handovers to verify`} />
       </div>
       <div className="mt-6 grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <Panel title="Recent orders" actions={<Link to="/admin/orders" className="text-sm text-primary">All orders</Link>}>
+        <Panel title="Recent orders" actions={!isLocalDemo && <Link to="/admin/orders" className="text-sm text-primary">All orders</Link>}>
           {data?.recentOrders.length ? (
             <Table head={["#", "Rep", "Outlet", "Total", "Status", "When"]}>
               {data.recentOrders.map((o) => (
                 <tr key={o.id}>
-                  <td><Link to="/admin/orders/$id" params={{ id: String(o.id) }} className="font-medium text-primary">#{o.id}</Link></td>
+                  <td>{isLocalDemo ? `#${o.id}` : <Link to="/admin/orders/$id" params={{ id: String(o.id) }} className="font-medium text-primary">#{o.id}</Link>}</td>
                   <td>{o.rep_name}</td><td>{o.outlet_name}</td><td>{ks(o.total_retail)}</td><td><Badge>{o.status}</Badge></td>
                   <td className="text-muted-foreground">{dateTime(o.created_at)}</td>
                 </tr>

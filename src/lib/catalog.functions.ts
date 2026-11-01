@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { publicClient, adminClient } from "./server-clients";
+import { isLocalDemo, localDemoCatalog, localDemoDashboard } from "./local-demo";
 
 const PUBLIC_COLS = "id, product_id, product_name, upc, unit, retail, wholesale, category, status, description, has_image, image_path, generation, updated_at";
 
@@ -10,6 +11,10 @@ export type PublicProduct = {
 };
 
 export const getCatalog = createServerFn({ method: "GET" }).handler(async () => {
+  if (isLocalDemo) {
+    const categories = Array.from(new Set(localDemoCatalog.items.map((product) => product.category))).sort();
+    return { ...localDemoCatalog, categories };
+  }
   const db = publicClient();
   const [products, reps] = await Promise.all([
     db.from("products").select(PUBLIC_COLS).order("id").range(0, 4999),
@@ -24,6 +29,11 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async () => 
 export const getProductBySlug = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => d)
   .handler(async ({ data }) => {
+    if (isLocalDemo) {
+      const want = data.slug.replace(/\s+/g, "").toLowerCase();
+      const product = localDemoCatalog.items.find((item) => item.product_id.replace(/\s+/g, "").toLowerCase() === want) ?? null;
+      return { product, reps: localDemoCatalog.reps, history: [] };
+    }
     const db = publicClient();
     const want = data.slug.replace(/\s+/g, "").toLowerCase();
     const { data: rows } = await db.from("products").select(PUBLIC_COLS).ilike("product_id", `%${want.replace(/^gtm-?/, "")}%`);
@@ -41,6 +51,11 @@ export const getProductBySlug = createServerFn({ method: "GET" })
 export const getActivity = createServerFn({ method: "GET" })
   .inputValidator((d: { limit?: number; beforeId?: number }) => d)
   .handler(async ({ data }) => {
+    if (isLocalDemo) {
+      const limit = Math.max(1, Math.min(data.limit ?? 30, 100));
+      const events = localDemoDashboard.activity.slice(0, limit);
+      return { latest_id: events[0]?.id ?? 0, events, has_more: false };
+    }
     const db = publicClient();
     const limit = Math.max(1, Math.min(data.limit ?? 30, 100));
     let q = db.from("activity_log").select("id, event_type, product_id, product_name, details, created_at").order("id", { ascending: false }).limit(limit);
@@ -57,6 +72,7 @@ export const submitWebOrder = createServerFn({ method: "POST" })
     return d;
   })
   .handler(async ({ data }) => {
+    if (isLocalDemo) throw new Error("Local demo only: orders are not submitted or saved.");
     const rep = data.rep_name.trim();
     const outlet = data.outlet_name.trim().slice(0, 200);
     if (!rep) throw new Error("Please select a sales rep.");

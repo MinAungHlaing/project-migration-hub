@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as RepRouteImport } from './routes/rep'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiActivityRouteImport } from './routes/api/activity'
@@ -21,10 +22,13 @@ import { Route as GalleryIndexRouteImport } from './routes/gallery.index'
 import { Route as GalleryCategoryRouteImport } from './routes/gallery.$category'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminCashboxRouteImport } from './routes/_authenticated/admin.cashbox'
 import { Route as AuthenticatedAdminDeliveriesRouteImport } from './routes/_authenticated/admin.deliveries'
+import { Route as AuthenticatedAdminExpensesRouteImport } from './routes/_authenticated/admin.expenses'
 import { Route as AuthenticatedAdminImagesRouteImport } from './routes/_authenticated/admin.images'
 import { Route as AuthenticatedAdminInventoryRouteImport } from './routes/_authenticated/admin.inventory'
 import { Route as AuthenticatedAdminRepsRouteImport } from './routes/_authenticated/admin.reps'
+import { Route as AuthenticatedAdminReturnsRouteImport } from './routes/_authenticated/admin.returns'
 import { Route as AuthenticatedAdminSalesReportRouteImport } from './routes/_authenticated/admin.sales-report'
 import { Route as AuthenticatedAdminUploadRouteImport } from './routes/_authenticated/admin.upload'
 import { Route as ApiImagesNameRouteImport } from './routes/api/images.$name'
@@ -60,6 +64,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RepRoute = RepRouteImport.update({
+  id: '/rep',
+  path: '/rep',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -107,10 +116,22 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminCashboxRoute =
+  AuthenticatedAdminCashboxRouteImport.update({
+    id: '/cashbox',
+    path: '/cashbox',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminDeliveriesRoute =
   AuthenticatedAdminDeliveriesRouteImport.update({
     id: '/deliveries',
     path: '/deliveries',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminExpensesRoute =
+  AuthenticatedAdminExpensesRouteImport.update({
+    id: '/expenses',
+    path: '/expenses',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminImagesRoute =
@@ -130,6 +151,12 @@ const AuthenticatedAdminRepsRoute = AuthenticatedAdminRepsRouteImport.update({
   path: '/reps',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminReturnsRoute =
+  AuthenticatedAdminReturnsRouteImport.update({
+    id: '/returns',
+    path: '/returns',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSalesReportRoute =
   AuthenticatedAdminSalesReportRouteImport.update({
     id: '/sales-report',
@@ -259,6 +286,7 @@ const ApiMobileVisitsSyncRoute = ApiMobileVisitsSyncRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/rep': typeof RepRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/api/activity': typeof ApiActivityRoute
@@ -267,10 +295,13 @@ export interface FileRoutesByFullPath {
   '/gallery/$category': typeof GalleryCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
   '/gallery/': typeof GalleryIndexRoute
+  '/admin/cashbox': typeof AuthenticatedAdminCashboxRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/expenses': typeof AuthenticatedAdminExpensesRoute
   '/admin/images': typeof AuthenticatedAdminImagesRoute
   '/admin/inventory': typeof AuthenticatedAdminInventoryRoute
   '/admin/reps': typeof AuthenticatedAdminRepsRoute
+  '/admin/returns': typeof AuthenticatedAdminReturnsRoute
   '/admin/sales-report': typeof AuthenticatedAdminSalesReportRoute
   '/admin/upload': typeof AuthenticatedAdminUploadRoute
   '/api/images/$name': typeof ApiImagesNameRoute
@@ -298,6 +329,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/rep': typeof RepRoute
   '/reset-password': typeof ResetPasswordRoute
   '/api/activity': typeof ApiActivityRoute
   '/api/price-history': typeof ApiPriceHistoryRoute
@@ -305,10 +337,13 @@ export interface FileRoutesByTo {
   '/gallery/$category': typeof GalleryCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
   '/gallery': typeof GalleryIndexRoute
+  '/admin/cashbox': typeof AuthenticatedAdminCashboxRoute
   '/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/admin/expenses': typeof AuthenticatedAdminExpensesRoute
   '/admin/images': typeof AuthenticatedAdminImagesRoute
   '/admin/inventory': typeof AuthenticatedAdminInventoryRoute
   '/admin/reps': typeof AuthenticatedAdminRepsRoute
+  '/admin/returns': typeof AuthenticatedAdminReturnsRoute
   '/admin/sales-report': typeof AuthenticatedAdminSalesReportRoute
   '/admin/upload': typeof AuthenticatedAdminUploadRoute
   '/api/images/$name': typeof ApiImagesNameRoute
@@ -338,6 +373,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/rep': typeof RepRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/api/activity': typeof ApiActivityRoute
@@ -346,10 +382,13 @@ export interface FileRoutesById {
   '/gallery/$category': typeof GalleryCategoryRoute
   '/product/$slug': typeof ProductSlugRoute
   '/gallery/': typeof GalleryIndexRoute
+  '/_authenticated/admin/cashbox': typeof AuthenticatedAdminCashboxRoute
   '/_authenticated/admin/deliveries': typeof AuthenticatedAdminDeliveriesRoute
+  '/_authenticated/admin/expenses': typeof AuthenticatedAdminExpensesRoute
   '/_authenticated/admin/images': typeof AuthenticatedAdminImagesRoute
   '/_authenticated/admin/inventory': typeof AuthenticatedAdminInventoryRoute
   '/_authenticated/admin/reps': typeof AuthenticatedAdminRepsRoute
+  '/_authenticated/admin/returns': typeof AuthenticatedAdminReturnsRoute
   '/_authenticated/admin/sales-report': typeof AuthenticatedAdminSalesReportRoute
   '/_authenticated/admin/upload': typeof AuthenticatedAdminUploadRoute
   '/api/images/$name': typeof ApiImagesNameRoute
@@ -379,6 +418,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/rep'
     | '/reset-password'
     | '/admin'
     | '/api/activity'
@@ -387,10 +427,13 @@ export interface FileRouteTypes {
     | '/gallery/$category'
     | '/product/$slug'
     | '/gallery/'
+    | '/admin/cashbox'
     | '/admin/deliveries'
+    | '/admin/expenses'
     | '/admin/images'
     | '/admin/inventory'
     | '/admin/reps'
+    | '/admin/returns'
     | '/admin/sales-report'
     | '/admin/upload'
     | '/api/images/$name'
@@ -418,6 +461,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/rep'
     | '/reset-password'
     | '/api/activity'
     | '/api/price-history'
@@ -425,10 +469,13 @@ export interface FileRouteTypes {
     | '/gallery/$category'
     | '/product/$slug'
     | '/gallery'
+    | '/admin/cashbox'
     | '/admin/deliveries'
+    | '/admin/expenses'
     | '/admin/images'
     | '/admin/inventory'
     | '/admin/reps'
+    | '/admin/returns'
     | '/admin/sales-report'
     | '/admin/upload'
     | '/api/images/$name'
@@ -457,6 +504,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/rep'
     | '/reset-password'
     | '/_authenticated/admin'
     | '/api/activity'
@@ -465,10 +513,13 @@ export interface FileRouteTypes {
     | '/gallery/$category'
     | '/product/$slug'
     | '/gallery/'
+    | '/_authenticated/admin/cashbox'
     | '/_authenticated/admin/deliveries'
+    | '/_authenticated/admin/expenses'
     | '/_authenticated/admin/images'
     | '/_authenticated/admin/inventory'
     | '/_authenticated/admin/reps'
+    | '/_authenticated/admin/returns'
     | '/_authenticated/admin/sales-report'
     | '/_authenticated/admin/upload'
     | '/api/images/$name'
@@ -498,6 +549,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  RepRoute: typeof RepRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiActivityRoute: typeof ApiActivityRoute
   ApiPriceHistoryRoute: typeof ApiPriceHistoryRoute
@@ -536,6 +588,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rep': {
+      id: '/rep'
+      path: '/rep'
+      fullPath: '/rep'
+      preLoaderRoute: typeof RepRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -601,11 +660,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/cashbox': {
+      id: '/_authenticated/admin/cashbox'
+      path: '/cashbox'
+      fullPath: '/admin/cashbox'
+      preLoaderRoute: typeof AuthenticatedAdminCashboxRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/deliveries': {
       id: '/_authenticated/admin/deliveries'
       path: '/deliveries'
       fullPath: '/admin/deliveries'
       preLoaderRoute: typeof AuthenticatedAdminDeliveriesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/expenses': {
+      id: '/_authenticated/admin/expenses'
+      path: '/expenses'
+      fullPath: '/admin/expenses'
+      preLoaderRoute: typeof AuthenticatedAdminExpensesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/images': {
@@ -627,6 +700,13 @@ declare module '@tanstack/react-router' {
       path: '/reps'
       fullPath: '/admin/reps'
       preLoaderRoute: typeof AuthenticatedAdminRepsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/returns': {
+      id: '/_authenticated/admin/returns'
+      path: '/returns'
+      fullPath: '/admin/returns'
+      preLoaderRoute: typeof AuthenticatedAdminReturnsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/sales-report': {
@@ -787,10 +867,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCashboxRoute: typeof AuthenticatedAdminCashboxRoute
   AuthenticatedAdminDeliveriesRoute: typeof AuthenticatedAdminDeliveriesRoute
+  AuthenticatedAdminExpensesRoute: typeof AuthenticatedAdminExpensesRoute
   AuthenticatedAdminImagesRoute: typeof AuthenticatedAdminImagesRoute
   AuthenticatedAdminInventoryRoute: typeof AuthenticatedAdminInventoryRoute
   AuthenticatedAdminRepsRoute: typeof AuthenticatedAdminRepsRoute
+  AuthenticatedAdminReturnsRoute: typeof AuthenticatedAdminReturnsRoute
   AuthenticatedAdminSalesReportRoute: typeof AuthenticatedAdminSalesReportRoute
   AuthenticatedAdminUploadRoute: typeof AuthenticatedAdminUploadRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -809,10 +892,13 @@ interface AuthenticatedAdminRouteChildren {
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCashboxRoute: AuthenticatedAdminCashboxRoute,
   AuthenticatedAdminDeliveriesRoute: AuthenticatedAdminDeliveriesRoute,
+  AuthenticatedAdminExpensesRoute: AuthenticatedAdminExpensesRoute,
   AuthenticatedAdminImagesRoute: AuthenticatedAdminImagesRoute,
   AuthenticatedAdminInventoryRoute: AuthenticatedAdminInventoryRoute,
   AuthenticatedAdminRepsRoute: AuthenticatedAdminRepsRoute,
+  AuthenticatedAdminReturnsRoute: AuthenticatedAdminReturnsRoute,
   AuthenticatedAdminSalesReportRoute: AuthenticatedAdminSalesReportRoute,
   AuthenticatedAdminUploadRoute: AuthenticatedAdminUploadRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
@@ -849,6 +935,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  RepRoute: RepRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiActivityRoute: ApiActivityRoute,
   ApiPriceHistoryRoute: ApiPriceHistoryRoute,
