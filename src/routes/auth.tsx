@@ -9,7 +9,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { hasLocalDemoSession, isLocalDemo, localDemoCredentials, startLocalDemoSession } from "@/lib/local-demo";
 
 const isLocalSupabase = isLocalDemo || ["localhost", "127.0.0.1", "::1"].includes(
-  new URL(import.meta.env.VITE_SUPABASE_URL || "http://localhost").hostname,
+  new URL(import.meta.env["VITE_SUPABASE_URL"] || "http://localhost").hostname,
 );
 
 export const Route = createFileRoute("/auth")({
