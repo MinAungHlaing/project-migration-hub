@@ -1,4 +1,5 @@
-export const isLocalDemo = import.meta.env.DEV && import.meta.env.VITE_LOCAL_DEMO !== "false";
+// Offline demo mode is opt-in only (VITE_LOCAL_DEMO=true) so the live preview always uses the real backend.
+export const isLocalDemo = import.meta.env.DEV && import.meta.env["VITE_LOCAL_DEMO"] === "true";
 
 export const localDemoCredentials = {
   email: "admin",

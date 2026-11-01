@@ -47,6 +47,51 @@ export type Database = {
         }
         Relationships: []
       }
+      cashbox_days: {
+        Row: {
+          business_date: string
+          card_sales: number
+          cash_sales: number
+          closed_by: string
+          counted: number
+          created_at: string
+          denominations: Json
+          id: number
+          note: string
+          opening: number
+          refunds: number
+          updated_at: string
+        }
+        Insert: {
+          business_date: string
+          card_sales?: number
+          cash_sales?: number
+          closed_by?: string
+          counted?: number
+          created_at?: string
+          denominations?: Json
+          id?: number
+          note?: string
+          opening?: number
+          refunds?: number
+          updated_at?: string
+        }
+        Update: {
+          business_date?: string
+          card_sales?: number
+          cash_sales?: number
+          closed_by?: string
+          counted?: number
+          created_at?: string
+          denominations?: Json
+          id?: number
+          note?: string
+          opening?: number
+          refunds?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       catalog_snapshots: {
         Row: {
           created_at: string
@@ -439,6 +484,42 @@ export type Database = {
           },
         ]
       }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          created_by: string
+          expense_date: string
+          id: number
+          note: string
+          status: string
+          vendor: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          created_by?: string
+          expense_date?: string
+          id?: number
+          note?: string
+          status?: string
+          vendor?: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          created_by?: string
+          expense_date?: string
+          id?: number
+          note?: string
+          status?: string
+          vendor?: string
+        }
+        Relationships: []
+      }
       id_counter: {
         Row: {
           id: number
@@ -763,6 +844,48 @@ export type Database = {
           product_id?: string
           product_name?: string
           source?: string
+        }
+        Relationships: []
+      }
+      product_returns: {
+        Row: {
+          condition: string
+          created_at: string
+          id: number
+          outlet_name: string
+          owner: string
+          product_id: number | null
+          product_name: string
+          quantity: number
+          reason: string
+          status: string
+          value: number
+        }
+        Insert: {
+          condition?: string
+          created_at?: string
+          id?: number
+          outlet_name?: string
+          owner?: string
+          product_id?: number | null
+          product_name: string
+          quantity: number
+          reason?: string
+          status?: string
+          value?: number
+        }
+        Update: {
+          condition?: string
+          created_at?: string
+          id?: number
+          outlet_name?: string
+          owner?: string
+          product_id?: number | null
+          product_name?: string
+          quantity?: number
+          reason?: string
+          status?: string
+          value?: number
         }
         Relationships: []
       }

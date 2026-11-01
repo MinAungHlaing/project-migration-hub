@@ -232,7 +232,7 @@ export function LocalFeaturePreview({ pathname }: { pathname: string }) {
               {row.map((cell, cellIndex) => {
                 const isStatus = /^(new|fulfilled|cancelled|in stock|out of stock|active|inactive|draft|received|ordered|in progress|completed|pending|approved|rejected|assigned|awaiting delivery|needs verification)$/i.test(cell);
                 if (isStatus && (section === "orders" || section === "overview")) {
-                  const id = Number(row[0].replace("#", ""));
+                  const id = Number((row[0] ?? "").replace("#", ""));
                   return <td key={cellIndex}><select aria-label={`Status for order ${id}`} value={cell} onChange={(event) => updateLocalOrderStatus(id, event.target.value)} className="rounded-md border bg-background px-2 py-1 text-xs"><option>New</option><option>Fulfilled</option><option>Cancelled</option></select></td>;
                 }
                 if (isStatus && cellIndex === row.length - 1) {
