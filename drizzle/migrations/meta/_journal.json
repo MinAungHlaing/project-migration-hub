@@ -43,6 +43,13 @@
       "when": 1793459411704,
       "tag": "0005_erp_staff_permission_foundation",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793524797647,
+      "tag": "0006_expenses_returns_cashbox",
+      "breakpoints": true
     }
   ]
 }
